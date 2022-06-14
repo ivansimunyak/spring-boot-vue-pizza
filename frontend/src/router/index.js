@@ -19,8 +19,6 @@ import Logout from "../components/Logout.vue";
 import Cart from "../components/Cart.vue";
 import CheckoutPage from "../views/CheckoutPage.vue";
 import AdminPage from "../views/AdminPage.vue";
-// import axios from "axios";
-// import store from '../store/index.js';
 
 const routes = [
   {

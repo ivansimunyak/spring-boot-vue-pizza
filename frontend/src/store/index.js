@@ -10,6 +10,7 @@ export default createStore({
   state: {
     uniqueProductKey: 0,
     user: null,
+    test:null,
     accessToken: null,
     isAdmin: null,
     isEmployee: null,
