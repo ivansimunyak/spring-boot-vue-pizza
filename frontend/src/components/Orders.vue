@@ -1,5 +1,6 @@
 <template>
   <h1>{{ statusMsg }}</h1>
+  <p>{{orders[0]}}</p>
   <p class="error" v-if="error">{{ error }}</p>
   <table class="table">
     <thead>
@@ -51,7 +52,7 @@ export default {
   data() {
     return {
       orders: [],
-      columns: ["name", "order_status", "adress", "phone_number"],
+      columns: ["firstName", "status", "adress", "phoneNumber"],
       headers: ["Name", "Order Status", "Adress", "Phone"],
       error: "",
       checkDetails: true,
@@ -61,7 +62,7 @@ export default {
   mounted() {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + this.accessToken;
-    const url = "http://localhost:3000/api/orders/";
+    const url = "http://localhost:8080/api/orders/";
     axios
       .get(url)
       .then((response) => {

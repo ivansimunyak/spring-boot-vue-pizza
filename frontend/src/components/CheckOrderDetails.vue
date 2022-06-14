@@ -3,6 +3,7 @@
     <div id="header">
       <h1>Order Details</h1>
       <h2>Order ID {{ orderID }}</h2>
+      <p>{{orderProducts}}</p>
     </div>
     <btn-styled class="btnDelete" @click="removeOrder">Delete Order</btn-styled>
     <btn-styled
@@ -42,13 +43,12 @@
     </div>
     <div class="right-list">
       <ul v-for="item in orderDetails" :key="item.id">
-        <li>Order Received: {{ this.format_date(this.whenMade) }}</li>
+        <li>Order Received: {{ this.format_date(this.orderDate) }}</li>
         <br />
-        <li>Order Sent: {{ this.format_date(this.whenSent) }}</li>
+        <li>Order Sent: {{ this.format_date(this.shippingDate) }}</li>
         <br />
-        <li>Order Status: {{ item.order_status }}</li>
+        <li>Order Status: {{ item.status }}</li>
         <br />
-        <li>Employee:{{ employeeName }}</li>
         <br />
         <li>Comments: {{ item.comments }}</li>
       </ul>
@@ -79,33 +79,27 @@ export default {
       columnsX: ["quantity", "price"],
       orderProducts: [],
       orderDetails: [],
-      sum: 0,
-      paymentMethodID: "",
-      paymentMethodName: "",
-      locationID: "",
-      locationName: "",
-      employeeID: "",
-      employeeName: "",
-      whenMade: 0,
+      orderDate: 0,
+      shippingDate: "",
       adress: "",
       name: "",
       phone_number: "",
       orderStatus: "",
-      whenSent: "",
+
     };
   },
   computed: {
     accessToken() {
       return this.$store.getters.accessToken;
     },
-    user() {
-      return this.$store.getters.user;
+    username() {
+      return this.$store.getters.username;
     },
   },
   mounted() {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + this.accessToken;
-    const url = "http://localhost:3000/api/orders/" + this.orderID;
+    const url = "http://localhost:8080/api/ordersproduct/getordersproduct" + this.orderID;
     axios
       .get(url, {
         headers: {
@@ -115,7 +109,7 @@ export default {
       .then((response) => {
         this.orderProducts = response.data;
       });
-    const url1 = "http://localhost:3000/api/orders/details/" + this.orderID;
+    const url1 = "http://localhost:8080/api/orders/" + this.orderID;
     axios
       .get(url1, {
         headers: {
@@ -133,45 +127,7 @@ export default {
         this.phone_number = response.data[0].phone_number;
         this.orderStatus = response.data[0].order_status;
         this.whenSent = new Date(response.data[0].when_sent);
-        const url5 =
-          "http://localhost:3000/api/user/oneuser/" + this.employeeID;
-        axios.get(url5).then((response) => {
-          this.employeeName = response.data[0].user_name;
-        });
       });
-    const url2 = "http://localhost:3000/api/orders/sum/" + this.orderID;
-    axios
-      .get(url2, {
-        headers: {
-          Authorization: "Bearer " + this.accessToken,
-        },
-      })
-      .then((response) => {
-        this.sum = response.data[0].sum;
-      });
-    const url3 =
-      "http://localhost:3000/api/paymentMethod/" + this.paymentMethodID;
-    axios
-      .get(url3, {
-        headers: {
-          Authorization: "Bearer " + this.accessToken,
-        },
-      })
-      .then((response) => {
-        this.paymentMethodName = response.data[0].name;
-      });
-    const url4 = "http://localhost:3000/api/location/" + this.locationID;
-    axios
-      .get(url4, {
-        headers: {
-          Authorization: "Bearer " + this.accessToken,
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-        this.locationName = response.data[0].locationName;
-      });
-
     this.format_date(this.whenMade);
   },
   methods: {
@@ -344,7 +300,6 @@ ul {
   padding: 5px;
   margin: 5px 0;
   border-radius: 15px;
-  box-shadow: 5px;
 }
 
 .left-list ul {
@@ -365,7 +320,7 @@ ul {
   padding: 5px;
   margin: 5px 0;
   border-radius: 15px;
-  box-shadow: 5px;
+
 }
 .right-list ul {
   margin-top: 1%;

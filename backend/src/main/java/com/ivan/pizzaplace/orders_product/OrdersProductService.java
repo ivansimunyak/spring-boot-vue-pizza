@@ -1,5 +1,6 @@
 package com.ivan.pizzaplace.orders_product;
 
+import com.ivan.pizzaplace.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,5 +40,15 @@ public class OrdersProductService {
         if (optionalOrdersProduct.isPresent()) {
             ordersProductRepository.delete(ordersProduct);
         } else throw new IllegalStateException("Record does not exist or id is not provided!");
+    }
+
+    public List<OrdersProduct> getOrdersProduct(Long id) {
+        List<OrdersProduct> ordersProduct = ordersProductRepository.findOrdersProductByOrderId(id);
+        if (!ordersProduct.isEmpty()) {
+            return ordersProduct;
+        } else {
+            throw new IllegalStateException("User not found!");
+        }
+
     }
 }

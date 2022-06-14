@@ -23,41 +23,41 @@
       </thead>
       <tbody>
         <tr v-for="(user, index) in users" :key="index">
-          <td v-if="user.username == searchingUser && searchUser">
-            {{ user.user_id }}
+          <td v-if="user.username === searchingUser && searchUser">
+            {{ user.id }}
           </td>
-          <td v-if="user.username == searchingUser && searchUser">
+          <td v-if="user.username === searchingUser && searchUser">
             {{ user.username }}
           </td>
-          <td v-if="user.username == searchingUser && searchUser">
+          <td v-if="user.username === searchingUser && searchUser">
             {{ user.email }}
           </td>
-          <td v-if="user.username == searchingUser && searchUser">
-            {{ user.phone_number }}
+          <td v-if="user.username === searchingUser && searchUser">
+            {{ user.phoneNumber }}
           </td>
-          <td v-if="user.username == searchingUser && searchUser">
-            {{ user.user_type_name }}
+          <td v-if="user.username === searchingUser && searchUser">
+            {{ user.userType.name }}
           </td>
-          <td v-if="user.username == searchingUser && searchUser">
+          <td v-if="user.username === searchingUser && searchUser">
             <btn-styled class="btnEdit" @click="setType('Admin', user, index)"
               >Set Admin</btn-styled
             >
           </td>
-          <td v-if="user.username == searchingUser && searchUser">
+          <td v-if="user.username === searchingUser && searchUser">
             <btn-styled
               class="btnDelete"
               @click="setType('Employee', user, index)"
               >Set Employee</btn-styled
             >
           </td>
-          <td v-if="user.username == searchingUser && searchUser">
+          <td v-if="user.username === searchingUser && searchUser">
             <btn-styled
               class="btnEdit"
               @click="setType('Customer', user, index)"
               >Set Customer</btn-styled
             >
           </td>
-          <td v-if="user.username == searchingUser && searchUser">
+          <td v-if="user.username === searchingUser && searchUser">
             <btn-styled
               class="btnDelete"
               @click="removeUser(user.user_id, index)"
@@ -68,7 +68,7 @@
       </tbody>
     </table>
   </section>
-  <h2 id="table-header">List of all usdders</h2>
+  <h2 id="table-header">List of all users</h2>
   <section class="usersTable">
     <table>
       <thead>
@@ -87,12 +87,12 @@
       <tbody>
         <tr v-for="(user, index) in users" :key="index">
           <td>
-            {{ user.user_id }}
+            {{ user.id }}
           </td>
           <td>{{ user.username }}</td>
           <td>{{ user.email }}</td>
-          <td>{{ user.phone_number }}</td>
-          <td>{{ user.user_type_name }}</td>
+          <td>{{ user.phoneNumber }}</td>
+          <td>{{ user.userType.name }}</td>
           <td>
             <btn-styled class="btnEdit" @click="setType('Admin', user, index)"
               >Set Admin</btn-styled
@@ -143,7 +143,7 @@ export default {
   mounted() {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + this.accessToken;
-    const url = "http://localhost:3000/api/user/";
+    const url = "http://localhost:8080/api/user/";
     axios
       .get(url, {
         headers: {
@@ -157,7 +157,7 @@ export default {
         // error.response.status Check status code
         console.log(error.response.status);
       });
-    const url1 = "http://localhost:3000/api/userType/";
+    const url1 = "http://localhost:8080/api/usertype/";
     axios.get(url1).then((response) => {
       this.userTypes = response.data;
     });
@@ -165,46 +165,40 @@ export default {
   methods: {
     setType(user_type_name, user, index) {
       const record = this.userTypes.find(
-        (element) => element.name == user_type_name
+        (element) => element.name === user_type_name
       );
       axios
         .post(
-          "http://localhost:3000/api/user/updateusertype",
-          { user_id: user.user_id, user_type_id: record.id },
+          "http://localhost:8080/api/user/updateuser",
+          { id: user.id, userType:{id:record.id, name:record.name } },
           {
             headers: {
               Authorization: "Bearer " + this.accessToken,
             },
           }
         )
-        .then((res) => {
-          //Perform Success Action
-          console.log(res.data);
+        .then(() => {
           this.users.splice(index, 1, {
-            user_id: user.user_id,
-            user_type_id: record.id,
-            id: user.user_id,
-            user_type_name: record.name,
+            id: user.id,
+            userType:{id:record.id,name:record.name},
             username: user.username,
             email: user.email,
-            phone_number: user.phone_number,
+            phoneNumber: user.phoneNumber,
           });
         })
         .catch((error) => {
-          // error.response.status Check status code
           console.log(error.response.status);
         });
     },
     removeUser(id, index) {
       axios
-        .post("http://localhost:3000/api/user/deleteuser", { id: id })
+        .post("http://localhost:8080/api/user/deleteuser", { id: id })
         .then((res) => {
-          //Perform Success Action
+
           console.log(res.data);
           this.users.splice(index, 1);
         })
         .catch((error) => {
-          // error.response.status Check status code
           console.log(error.response.status);
         });
     },
@@ -228,7 +222,6 @@ export default {
 }
 .usersTable {
   margin-top: 10%;
-  border: 1px solid #999;
   border-radius: 1px;
   color: #333;
   background: white;
@@ -241,7 +234,6 @@ export default {
   border-color: #a80000;
 }
 .usersSearchTable {
-  border: 1px solid #999;
   border-radius: 1px;
   color: #333;
   background: white;
@@ -276,7 +268,6 @@ input {
   padding: 5px;
   margin: 5px 0;
   border-radius: 10px;
-  box-shadow: 5px;
   border-width: 1px;
   margin-bottom: 1%;
 }

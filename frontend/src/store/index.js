@@ -9,8 +9,7 @@ export default createStore({
   ],
   state: {
     uniqueProductKey: 0,
-    user: null,
-    test:null,
+    username: null,
     accessToken: null,
     isAdmin: null,
     isEmployee: null,
@@ -24,8 +23,8 @@ export default createStore({
     resetCart(state) {
       (state.cartCount = 0), (state.cart = []);
     },
-    setUser(state, user) {
-      state.user = user;
+    setUsername(state, username) {
+      state.username = username;
     },
     setToken(state, accessToken) {
       state.accessToken = accessToken;
@@ -37,7 +36,7 @@ export default createStore({
       state.isEmployee = isEmployee;
     },
     logout(state) {
-      (state.user = null),
+      (state.username = null),
         (state.isAdmin = null),
         (state.isEmployee = null),
         (state.accessToken = null),
@@ -62,12 +61,12 @@ export default createStore({
       const record = state.cart.find((element) => element.id == item.id);
       record.quantity--;
       state.cartCount--;
-      if (record.quantity == 0) {
+      if (record.quantity === 0) {
         state.cart.splice(state.cart.indexOf(record), 1);
       }
     },
     increaseQuantity(state, item) {
-      const record = state.cart.find((element) => element.id == item.id);
+      const record = state.cart.find((element) => element.id === item.id);
       record.quantity++;
     },
   },
@@ -77,8 +76,8 @@ export default createStore({
     isLoggedIn(state) {
       return !!state.accessToken;
     },
-    user(state) {
-      return state.user;
+    username(state) {
+      return state.username;
     },
     isAdmin(state) {
       return state.isAdmin;

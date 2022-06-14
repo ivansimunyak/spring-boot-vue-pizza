@@ -6,9 +6,6 @@
     <router-link v-if="isAdmin || isEmployee" to="/orders"
       ><font-awesome-icon :icon="['fas', 'list']" /> Orders</router-link
     >
-    <router-link v-if="isAdmin" to="/messages"
-      ><font-awesome-icon :icon="['fas', 'inbox']" /> Messages</router-link
-    >
     <router-link v-if="isAdmin" to="/products"
       ><font-awesome-icon :icon="['fas', 'list']" /> Products</router-link
     >
@@ -17,17 +14,6 @@
     >
     <router-link v-if="isAdmin" to="/usertypes"
       ><font-awesome-icon :icon="['fas', 'users']" /> User Types</router-link
-    >
-    <router-link v-if="isAdmin" to="/locations"
-      ><font-awesome-icon :icon="['fas', 'location-arrow']" />
-      Locations</router-link
-    >
-    <router-link v-if="isAdmin" to="/cities"
-      ><font-awesome-icon :icon="['fas', 'building']" /> Cities</router-link
-    >
-    <router-link v-if="isAdmin" to="/paymentmethods"
-      ><font-awesome-icon :icon="['fas', 'wallet']" /> Payment
-      Methods</router-link
     >
     <router-link to="/"
       ><font-awesome-icon :icon="['fas', 'house']" /> Home</router-link
@@ -89,7 +75,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
 }
-
 #navlist {
   border-bottom: 1px solid #a80000;
   border-top: 1px solid #a80000;

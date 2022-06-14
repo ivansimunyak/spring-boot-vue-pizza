@@ -41,7 +41,7 @@
     <table>
       <thead>
         <tr>
-          <th>Image</th>
+<!--          <th>Image</th>-->
           <th>Name</th>
           <th>Size</th>
           <th>Category</th>
@@ -51,25 +51,25 @@
       </thead>
       <tbody>
         <tr v-for="(product, index) in products" :key="index">
-          <td v-if="product.category_name == selectedCategory">
-            <img
-              id="product-image"
-              :src="require(`../assets/${product.picture}`)"
-            />
+<!--          <td v-if="product.productCategory.name === selectedCategory">-->
+<!--            <img-->
+<!--              id="product-image"-->
+<!--              :src="require(`../assets/${product.picture}`)"-->
+<!--            />-->
+<!--          </td>-->
+          <td v-if="product.productCategory.name === selectedCategory">
+            {{ product.name }}
           </td>
-          <td v-if="product.category_name == selectedCategory">
-            {{ product.product_name }}
-          </td>
-          <td v-if="product.category_name == selectedCategory">
+          <td v-if="product.productCategory.name === selectedCategory">
             {{ product.size }}
           </td>
-          <td v-if="product.category_name == selectedCategory">
-            {{ product.category_name }}
+          <td v-if="product.productCategory.name === selectedCategory">
+            {{ product.productCategory.name }}
           </td>
-          <td v-if="product.category_name == selectedCategory">
+          <td v-if="product.productCategory.name === selectedCategory">
             {{ product.price }}
           </td>
-          <td v-if="product.category_name == selectedCategory">
+          <td v-if="product.productCategory.name === selectedCategory">
             <btn-styled class="btnDelete" @click="addToCart(product)"
               >Add to cart</btn-styled
             >
@@ -99,11 +99,11 @@ export default {
     };
   },
   mounted() {
-    const url = "http://localhost:3000/api/products/productjoincategory";
+    const url = "http://localhost:8080/api/product";
     axios.get(url).then((response) => {
       this.products = response.data;
     });
-    const url1 = "http://localhost:3000/api/productCategory/foruser";
+    const url1 = "http://localhost:8080/api/productcategory";
     axios.get(url1).then((response) => {
       this.categories = response.data;
     });

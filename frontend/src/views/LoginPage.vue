@@ -43,31 +43,29 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["setUser", "setToken", "setAdmin", "setEmployee"]),
+    ...mapMutations(["setUsername", "setToken", "setAdmin", "setEmployee"]),
     submitForm() {
-      axios.defaults.withCredentials = true;
       axios
-        .post("http://localhost:3000/api/user/login", {
+        .post("http://localhost:8080/login", {
           username: this.username,
           password: this.password,
         })
         .then((res) => {
-          //Perform Success Action
-          console.log(res.data);
-          const accessToken = res.data.accessToken;
-          const user = res.data.user;
-          const isAdmin = res.data.isAdmin;
-          const isEmployee = res.data.isEmployee;
-          this.setUser(user);
+          console.log(res.data.authorities[0].authority);
+          const accessToken = res.data.jwttoken;
+          const username = res.data.username;
+          if (res.data.authorities[0].authority==="ROLE_Admin") {
+            this.setAdmin(true);
+          }else if(res.data.authorities[0].authority==="ROLE_Employee"){
+            this.setEmployee(true);
+          }
+          this.setUsername(username);
           this.setToken(accessToken);
-          this.setAdmin(isAdmin);
-          this.setEmployee(isEmployee);
           this.$router.push("/");
         })
         .catch((error) => {
-          // error.response.status Check status code
           this.errorMsg = "Wrong email or password!";
-          console.log(error);
+          console.log(error+"hey");
         });
     },
   },
@@ -100,7 +98,6 @@ input {
   padding: 5px;
   margin: 5px 0;
   border-radius: 10px;
-  box-shadow: 5px;
   border-width: 1px;
 }
 label {

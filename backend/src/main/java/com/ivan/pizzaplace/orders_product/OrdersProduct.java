@@ -1,5 +1,6 @@
 package com.ivan.pizzaplace.orders_product;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ivan.pizzaplace.orders.Orders;
 import com.ivan.pizzaplace.product.Product;
 
@@ -10,9 +11,11 @@ import javax.persistence.*;
 public class OrdersProduct {
     @EmbeddedId
     private OrdersProductId ordersProductId;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "order_id", updatable = false, insertable = false)
     private Orders orders;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "product_id", updatable = false, insertable = false)
     private Product product;
