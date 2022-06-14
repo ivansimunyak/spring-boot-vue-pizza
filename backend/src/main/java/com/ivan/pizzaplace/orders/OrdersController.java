@@ -22,7 +22,7 @@ public class OrdersController {
     }
 
     @PostMapping(path = "/addorder")
-    public void addOrder(@RequestBody Orders orders) {
+    public void addBorder(@RequestBody Orders orders) {
         ordersService.insertNewOrder(orders);
     }
 
