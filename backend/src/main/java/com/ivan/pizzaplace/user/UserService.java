@@ -37,7 +37,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void updateUser(User user) {
+    public void updateUsersType(User user) {
         User foundUser = userRepository.findUserById(user.getId());
         if (foundUser != null) {
             foundUser.setUserType(user.getUserType());

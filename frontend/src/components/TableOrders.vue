@@ -10,7 +10,7 @@
       <tbody>
         <tr v-for="(item, index) in items" :key="index">
           <td v-for="(column, indexColumn) in columns" :key="indexColumn">
-            {{ item[column] }}
+            {{ item[index] }}
           </td>
           <td>{{ item[columnsX[0]] * item[columnsX[1]] }}</td>
         </tr>

@@ -1,9 +1,11 @@
 package com.ivan.pizzaplace.orders;
 
+import com.ivan.pizzaplace.orders_product.OrdersProduct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "api/orders")
@@ -21,8 +23,12 @@ public class OrdersController {
         return ordersService.getOrders();
     }
 
+    @GetMapping(path = "/getorder/")
+    public Orders getOneOrder(@RequestParam Long id) {
+        return ordersService.getOrder(id);
+    }
     @PostMapping(path = "/addorder")
-    public void addBorder(@RequestBody Orders orders) {
+    public void addOrder(@RequestBody Orders orders) {
         ordersService.insertNewOrder(orders);
     }
 
@@ -31,8 +37,13 @@ public class OrdersController {
         ordersService.updateOrders(orders);
     }
 
-    @DeleteMapping(path = "/deleteorder")
-    public void deleteOrder(@RequestBody Orders order) {
-        ordersService.deleteOrders(order);
+    @PostMapping(path = "/updateorderstatus")
+    public void updateOrderStatus(@RequestBody Orders orders) {
+        ordersService.updateOrderStatus(orders);
+    }
+
+    @PostMapping(path = "/deleteorder/")
+    public void deleteOrder(@RequestParam Long id) {
+        ordersService.deleteOrders(id);
     }
 }

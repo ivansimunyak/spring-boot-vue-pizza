@@ -3,7 +3,7 @@
     <div id="header">
       <h1>Order Details</h1>
       <h2>Order ID {{ orderID }}</h2>
-      <p>{{orderProducts}}</p>
+      <p>{{ordersProduct}}</p>
     </div>
     <btn-styled class="btnDelete" @click="removeOrder">Delete Order</btn-styled>
     <btn-styled
@@ -29,62 +29,74 @@
       >Set to delivered</btn-styled
     >
     <div class="left-list">
-      <ul v-for="item in orderDetails" :key="item.id">
-        <li>Name: {{ item.name }}</li>
+      <ul>
+        <li>Name: {{ orderDetails.firstName }}</li>
         <br />
-        <li>Phone Number: {{ item.phone_number }}</li>
+        <li>Phone Number: {{ orderDetails.phoneNumber }}</li>
         <br />
-        <li>Store: {{ locationName }}</li>
+        <li>Adress: {{ orderDetails.adress }}</li>
         <br />
-        <li>Adress: {{ item.adress }}</li>
-        <br />
-        <li>Payment Method: {{ paymentMethodName }}</li>
+        <li>Email: {{userEmail}}</li>
       </ul>
     </div>
     <div class="right-list">
-      <ul v-for="item in orderDetails" :key="item.id">
-        <li>Order Received: {{ this.format_date(this.orderDate) }}</li>
+      <ul>
+        <li>Order Received: {{ this.format_date(orderDetails.orderDate) }}</li>
         <br />
-        <li>Order Sent: {{ this.format_date(this.shippingDate) }}</li>
-        <br />
-        <li>Order Status: {{ item.status }}</li>
-        <br />
-        <br />
-        <li>Comments: {{ item.comments }}</li>
+        <li>Order Sent: {{ this.format_date(orderDetails.orderDate) }}</li>
+        <br/>
+        <li>Order Status: {{ orderDetails.status }}</li>
+        <br>
+        <li>Comments: {{ orderDetails.customerComment }}</li>
       </ul>
     </div>
 
-    <table-orders
-      id="table"
-      :columns="this.columns"
-      :headers="this.headers"
-      :items="orderProducts"
-      :columnsX="this.columnsX"
-    ></table-orders>
+    <section class="orders-table">
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Size</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Subtotal</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="(orderProduct, index) in orderProducts" :key="index">
+          <td>
+              {{ orderProduct.product.name }}
+          </td>
+          <td>
+            {{ orderProduct.product.size }}
+          </td>
+          <td>
+            {{ orderProduct.quantity }}
+          </td>
+          <td>
+            {{ orderProduct.product.price }}
+          </td>
+          <td>{{ 5 }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </section>
   </div>
 </template>
 
 <script>
-import TableOrders from "./TableOrders.vue";
 import axios from "axios";
 import BtnStyled from "./BtnStyled.vue";
 import moment from "moment";
 export default {
   props: { orderID: Number },
-  components: { TableOrders, BtnStyled },
+  components: { BtnStyled },
   data() {
     return {
-      columns: ["name", "size", "quantity", "price"],
-      headers: ["Product Name", "Product Size", "Quantity", "Price"],
-      columnsX: ["quantity", "price"],
       orderProducts: [],
       orderDetails: [],
       orderDate: 0,
-      shippingDate: "",
-      adress: "",
-      name: "",
-      phone_number: "",
-      orderStatus: "",
+      userEmail:null
 
     };
   },
@@ -97,9 +109,7 @@ export default {
     },
   },
   mounted() {
-    axios.defaults.headers.common["Authorization"] =
-      "Bearer " + this.accessToken;
-    const url = "http://localhost:8080/api/ordersproduct/getordersproduct" + this.orderID;
+    const url = "http://localhost:8080/api/orders/getorder/?id=" + this.orderID;
     axios
       .get(url, {
         headers: {
@@ -107,26 +117,10 @@ export default {
         },
       })
       .then((response) => {
-        this.orderProducts = response.data;
-      });
-    const url1 = "http://localhost:8080/api/orders/" + this.orderID;
-    axios
-      .get(url1, {
-        headers: {
-          Authorization: "Bearer " + this.accessToken,
-        },
-      })
-      .then((response) => {
+        console.log(response.data)
         this.orderDetails = response.data;
-        this.paymentMethodID = response.data[0].payment_method_id;
-        this.locationID = response.data[0].location_id;
-        this.employeeID = response.data[0].employee_id;
-        this.whenMade = new Date(response.data[0].when_made);
-        this.adress = response.data[0].adress;
-        this.name = response.data[0].name;
-        this.phone_number = response.data[0].phone_number;
-        this.orderStatus = response.data[0].order_status;
-        this.whenSent = new Date(response.data[0].when_sent);
+        this.orderProducts= response.data.ordersProducts;
+        this.userEmail=response.data.customer.email;
       });
     this.format_date(this.whenMade);
   },
@@ -138,10 +132,11 @@ export default {
     },
     removeOrder() {
       axios
-        .post("http://localhost:3000/api/orders/removeorder/" + this.orderID)
-        .then((res) => {
+        .post(
+          "http://localhost:8080/api/orders/deleteorder/?id=" + this.orderID
+        )
+        .then(() => {
           //Perform Success Action
-          console.log(res.data);
           alert("Order removed successfully! ");
           this.$router.push("/orders");
         })
@@ -152,13 +147,12 @@ export default {
     },
     setToDelivered() {
       axios
-        .post("http://localhost:3000/api/orders/setorderdelivered/", {
+        .post("http://localhost:8080/api/orders/updateorderstatus", {
           id: this.orderID,
-          user_id: this.user.user_id,
+          status: "Delivered"
         })
-        .then((res) => {
+        .then(() => {
           //Perform Success Action
-          console.log(res.data);
           this.$router.push({
             name: "Order Page",
             statusEdited: true,
@@ -171,13 +165,12 @@ export default {
     },
     setToCanceled() {
       axios
-        .post("http://localhost:3000/api/orders/setordercanceled/", {
+        .post("http://localhost:8080/api/orders/updateorderstatus", {
           id: this.orderID,
-          user_id: this.user.user_id,
+          status: "Canceled"
         })
-        .then((res) => {
+        .then(() => {
           //Perform Success Action
-          console.log(res.data);
           this.$router.push({
             name: "Order Page",
             statusEdited: true,
@@ -190,9 +183,9 @@ export default {
     },
     setToProcessing() {
       axios
-        .post("http://localhost:3000/api/orders/setorderprocessing/", {
+        .post("http://localhost:8080/api/orders/updateorderstatus", {
           id: this.orderID,
-          user_id: this.user.user_id,
+          status: "Processing",
         })
         .then((res) => {
           //Perform Success Action
@@ -271,22 +264,12 @@ export default {
   top: 10%;
   left: 3.25%;
   border-style: outset;
-  /* filter: blur(1px); */
 }
-.wrap-table {
-  position: absolute;
-  top: 65%;
-  left: -1%;
-}
+
 ul {
   font-weight: 300;
 }
-#table {
-  width: 76%;
-  border-style: outset;
-  /* border-top-style:    ; */
-  border-color: #a80000;
-}
+
 .left-list {
   height: 18%;
   width: 40%;
@@ -325,9 +308,44 @@ ul {
 .right-list ul {
   margin-top: 1%;
   list-style-type: none;
+  font-size: 25px;
   text-align: center;
 }
 li {
   border-bottom: 1px solid #a80000;
+}
+.orders-table {
+  border: 1px solid #999;
+  border-radius: 1px;
+  color: #333;
+  background: white;
+  overflow: auto;
+  height: 250px;
+  width: 40%;
+  position: relative;
+  top: 60%;
+  margin-left: auto;
+  margin-right: auto;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+th {
+  position: sticky;
+  top: 0;
+  background: #a80000;
+  padding: 10px 5px;
+  text-align: center;
+  border-bottom: 1px solid #a80000;
+  color: white;
+  z-index: 3;
+}
+td {
+  padding: 5px 5px;
+  text-align: center;
+  z-index: 1;
+  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial,
+  sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
 }
 </style>

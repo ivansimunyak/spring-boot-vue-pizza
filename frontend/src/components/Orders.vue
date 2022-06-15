@@ -81,14 +81,13 @@ export default {
   methods: {
     removeOrder(id, index) {
       axios
-        .post("http://localhost:3000/api/orders/removeorder/" + id, {
+        .post("http://localhost:8080/api/orders/deleteorder/?id=" + id, {
           headers: {
             Authorization: "Bearer " + this.accessToken,
           },
         })
-        .then((res) => {
+        .then(() => {
           //Perform Success Action
-          console.log(res.data);
           this.statusMsg = "Order removed successfully!";
           this.orders.splice(index, 1);
         })

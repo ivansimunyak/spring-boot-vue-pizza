@@ -49,6 +49,5 @@ public class OrdersProductService {
         } else {
             throw new IllegalStateException("User not found!");
         }
-
     }
 }

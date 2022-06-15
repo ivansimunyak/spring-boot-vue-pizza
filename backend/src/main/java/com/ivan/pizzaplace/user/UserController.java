@@ -27,7 +27,7 @@ public class UserController {
 
     @PostMapping(path = "/updateuser")
     public void updateUser(@RequestBody User user) {
-        userService.updateUser(user);
+        userService.updateUsersType(user);
     }
 
     @PostMapping(path = "/register")

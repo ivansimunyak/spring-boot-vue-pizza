@@ -1,9 +1,13 @@
 package com.ivan.pizzaplace.orders;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ivan.pizzaplace.orders_product.OrdersProduct;
+import com.ivan.pizzaplace.review.Review;
 import com.ivan.pizzaplace.user.User;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity(name = "Orders")
 @Table(name = "orders")
@@ -22,6 +26,9 @@ public class Orders {
     private String customerComment;
     private String firstName;
     private String lastName;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_id")
+    private List<OrdersProduct> ordersProducts;
 
     public Orders() {
     }
@@ -34,7 +41,8 @@ public class Orders {
                   Date shippingDate,
                   String customerComment,
                   String firstName,
-                  String lastName) {
+                  String lastName,
+                  List<OrdersProduct> ordersProducts) {
         this.customer = customer;
         this.status = status;
         this.adress = adress;
@@ -44,6 +52,7 @@ public class Orders {
         this.customerComment = customerComment;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.ordersProducts=ordersProducts;
     }
 
     public Orders(Long id,
@@ -55,7 +64,8 @@ public class Orders {
                   Date shippingDate,
                   String customerComment,
                   String firstName,
-                  String lastName) {
+                  String lastName,
+                  List<OrdersProduct> ordersProducts) {
         this.id = id;
         this.customer = customer;
         this.status = status;
@@ -66,6 +76,7 @@ public class Orders {
         this.customerComment = customerComment;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.ordersProducts=ordersProducts;
     }
 
     public Long getId() {
@@ -148,6 +159,14 @@ public class Orders {
         this.lastName = lastName;
     }
 
+    public List<OrdersProduct> getOrdersProducts() {
+        return ordersProducts;
+    }
+
+    public void setOrdersProducts(List<OrdersProduct> ordersProducts) {
+        this.ordersProducts = ordersProducts;
+    }
+
     @Override
     public String toString() {
         return "Orders{" +
@@ -161,6 +180,7 @@ public class Orders {
                 ", customerComment='" + customerComment + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", ordersProducts=" + ordersProducts +
                 '}';
     }
 }
