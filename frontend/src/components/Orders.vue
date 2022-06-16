@@ -27,7 +27,7 @@
             class="btnEdit"
             @click="
               $router.push({
-                path: `/editorder/${order.id}/${order.adress}/${order.name}/${order.phone_number}/${order.order_status}`,
+                path: `/editorder/${order.id}`
               })
             "
             >Edit</btn-styled
@@ -100,7 +100,6 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 table {
   border-collapse: collapse;

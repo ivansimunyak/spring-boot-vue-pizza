@@ -48,7 +48,8 @@ public class User {
                 String lastName,
                 String phoneNumber,
                 UserType userType,
-                List<Review> reviews) {
+                List<Review> reviews
+    ) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -69,7 +70,8 @@ public class User {
                 String lastName,
                 String phoneNumber,
                 UserType userType,
-                List<Review> reviews) {
+                List<Review> reviews
+    ) {
         this.id = id;
         this.username = username;
         this.password = password;

@@ -2,6 +2,7 @@
   <div class="wrapper">
     <div class="header">
       <h1>Edit Order ID {{ orderID }}</h1>
+      <h2>{{formStatus}}</h2>
     </div>
     <btn-styled
       @click="$router.push({ path: `/checkDetails/${orderID}` })"
@@ -14,27 +15,27 @@
     <div class="form">
       <form @submit.prevent="submitForm">
         <label for="fname">Name:</label><br />
-        <input type="text" required name="name" v-model="forms.name" /><br />
+        <input type="text" required name="name" v-model="userData.firstName" /><br />
         <label for="lname">Adress:</label><br />
         <input
           type="text"
           required
           name="adress"
-          v-model="forms.adress"
+          v-model="userData.adress"
         /><br />
         <label for="phone">Phone:</label><br />
         <input
           type="number"
           required
           name="phone_number"
-          v-model="forms.phone_number"
+          v-model="userData.phoneNumber"
         /><br />
         <label for="orderState">Order status:</label><br />
         <select
           id="selectForm"
           required
           name="order_status"
-          v-model="forms.order_status"
+          v-model="userData.status"
         >
           <option value="Delivered">Delivered</option>
           <option value="Canceled">Canceled</option>
@@ -52,19 +53,25 @@ export default {
   components: {
     BtnStyled,
   },
-  props: ["orderID", "userAdress", "userPhone", "userName", "orderStatus"],
+  props: ["orderID"],
   data() {
     return {
-      forms: {
-        name: this.userName,
-        adress: this.userAdress,
-        phone_number: this.userPhone,
-        order_status: this.orderStatus,
-        id: this.orderID,
-      },
+      userData:[],
       formStatus: "",
       resetName: "",
     };
+  },
+  mounted() {
+    const url = "http://localhost:8080/api/orders/getorder/?id=" + this.orderID;
+    axios
+        .get(url, {
+          headers: {
+            Authorization: "Bearer " + this.accessToken,
+          },
+        })
+      .then((response) => {
+        this.userData=response.data;
+        });
   },
   computed: {
     accessToken() {
@@ -83,11 +90,10 @@ export default {
     },
     submitForm() {
       axios
-        .post("http://localhost:3000/api/orders/editorder", this.forms)
-        .then((res) => {
+        .post("http://localhost:8080/api/orders/updateorder", this.userData)
+        .then(() => {
           //Perform Success Action
           this.formStatus = "Order edited successfully!";
-          console.log(res.data);
         })
         .catch((error) => {
           // error.response.status Check status code
@@ -133,14 +139,12 @@ input[type="text"] {
   padding: 5px;
   margin: 5px 0;
   border-radius: 10px;
-  box-shadow: 5px;
   border-width: 1px;
 }
 input[type="number"] {
   padding: 5px;
   margin: 5px 0;
   border-radius: 10px;
-  box-shadow: 5px;
   border-width: 1px;
 }
 select {

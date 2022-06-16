@@ -38,7 +38,7 @@ const routes = [
       import("../views/About.vue"),
   },
   {
-    path: "/editorder/:id/:adress/:name/:phone/:orderStatus",
+    path: "/editorder/:id",
     name: "Edit Order",
     component: EditOneOrder,
   },

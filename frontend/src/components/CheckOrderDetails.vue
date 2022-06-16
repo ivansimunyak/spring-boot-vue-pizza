@@ -10,7 +10,7 @@
       class="btnEdit"
       @click="
         $router.push({
-          path: `/editorder/${orderID}/${this.adress}/${this.name}/${this.phone_number}/${this.orderStatus}`,
+          path: `/editorder/${orderID}`,
         })
       "
     >

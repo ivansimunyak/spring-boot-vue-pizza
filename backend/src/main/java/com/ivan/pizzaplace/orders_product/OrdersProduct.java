@@ -11,25 +11,19 @@ import javax.persistence.*;
 public class OrdersProduct {
     @EmbeddedId
     private OrdersProductId ordersProductId;
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "order_id", updatable = false, insertable = false)
-    private Orders orders;
 
     @ManyToOne
     @JoinColumn(name = "product_id", updatable = false, insertable = false)
     private Product product;
     private int quantity;
 
-    public OrdersProduct(Orders orders, Product product, int quantity) {
-        this.orders = orders;
+    public OrdersProduct( Product product, int quantity) {
         this.product = product;
         this.quantity = quantity;
     }
 
-    public OrdersProduct(OrdersProductId ordersProductId, Orders orders, Product product, int quantity) {
+    public OrdersProduct(OrdersProductId ordersProductId, Product product, int quantity) {
         this.ordersProductId = ordersProductId;
-        this.orders = orders;
         this.product = product;
         this.quantity = quantity;
     }
@@ -45,13 +39,6 @@ public class OrdersProduct {
         this.ordersProductId = ordersProductId;
     }
 
-    public Orders getOrders() {
-        return orders;
-    }
-
-    public void setOrders(Orders orders) {
-        this.orders = orders;
-    }
 
     public Product getProduct() {
         return product;
@@ -73,7 +60,6 @@ public class OrdersProduct {
     public String toString() {
         return "OrdersProduct{" +
                 "ordersProductId=" + ordersProductId +
-                ", orders=" + orders +
                 ", product=" + product +
                 ", quantity=" + quantity +
                 '}';
