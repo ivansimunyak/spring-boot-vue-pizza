@@ -1,4 +1,5 @@
 <template>
+  {{ products }}
   <section class="productsTable">
     <table>
       <thead>
@@ -14,10 +15,10 @@
       <tbody>
         <tr v-for="(product, index) in products" :key="index">
           <td>
-            <img
-              id="product-image"
-              :src="require(`../assets/${product.picture}`)"
-            />
+            <!--            <img-->
+            <!--              id="product-image"-->
+            <!--              :src="require(`../assets/${product.picture}`)"-->
+            <!--            />-->
           </td>
           <td>{{ product.name }}</td>
           <td>{{ product.size }}</td>
@@ -30,10 +31,10 @@
                   product.id,
                   product.name,
                   product.price,
-                  product.product_category_id,
+                  product.productCategory.id,
                   product.size,
                   index,
-                  product.picture
+                  // product.picture
                 )
               "
               >Edit</btn-styled
@@ -41,9 +42,12 @@
           </td>
           <td>
             <btn-styled
-              class="btnDelete"
-              @click="removeProduct(product.id, product.picture, index)"
-              >Remove</btn-styled
+                class="btnDelete"
+                @click="removeProduct(product.id,
+               // product.picture,
+                index)"
+            >Remove
+            </btn-styled
             >
           </td>
         </tr>
@@ -89,8 +93,8 @@
           {{ category.name }}
         </option></select
       ><br />
-      <label for="image">Image:</label><br />
-      <input type="file" name="image" @change="handleFileUpload($event)" />
+      <!--      <label for="image">Image:</label><br />-->
+      <!--      <input type="file" name="image" @change="handleFileUpload($event)" />-->
       <btn-styled type="submit">Submit</btn-styled>
     </form>
   </div>
@@ -117,7 +121,7 @@ export default {
   mounted() {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + this.accessToken;
-    const url = "http://localhost:3000/api/products/";
+    const url = "http://localhost:8080/api/product";
     axios
       .get(url, {
         headers: {
@@ -127,7 +131,7 @@ export default {
       .then((response) => {
         this.products = response.data;
       });
-    const url2 = "http://localhost:3000/api/productCategory/";
+    const url2 = "http://localhost:8080/api/productcategory";
     axios
       .get(url2, {
         headers: {
@@ -146,23 +150,20 @@ export default {
   methods: {
     removeProduct(id, productImg, index) {
       axios
-        .post(
-          "http://localhost:3000/api/products/removeproduct/" +
-            id +
-            "/" +
-            productImg,
-          {
-            headers: {
-              Authorization: "Bearer " + this.accessToken,
-            },
-          }
-        )
-        .then((res) => {
-          //Perform Success Action
-          console.log(res.data);
-          this.products.splice(index, 1);
-          alert("Product removed!");
-        })
+          .post(
+              "http://localhost:8080/api/product/deleteproduct",
+              {id: id},
+              {
+                headers: {
+                  Authorization: "Bearer " + this.accessToken,
+                },
+              }
+          )
+          .then(() => {
+            //Perform Success Action
+            this.products.splice(index, 1);
+            alert("Product removed!");
+          })
         .catch((error) => {
           // error.response.status Check status code
           console.log(error.response.status);
@@ -214,17 +215,17 @@ export default {
       } else {
         axios
           .post(
-            "http://localhost:3000/api/products/editproduct",
-            {
-              name: this.editName,
-              id: this.editID,
-              size: this.editSize,
-              price: this.editPrice,
-              product_category_id: this.editCategoryID,
-            },
-            {
-              headers: {
-                Authorization: "Bearer " + this.accessToken,
+              "http://localhost:8080/api/product/updateproduct",
+              {
+                name: this.editName,
+                id: this.editID,
+                size: this.editSize,
+                price: this.editPrice,
+                productCategory: {id: this.editCategoryID},
+              },
+              {
+                headers: {
+                  Authorization: "Bearer " + this.accessToken,
               },
             }
           )
@@ -301,7 +302,6 @@ input {
   padding: 5px;
   margin: 5px 0;
   border-radius: 10px;
-  box-shadow: 5px;
   border-width: 1px;
   margin-bottom: 1%;
 }
@@ -309,7 +309,6 @@ select {
   padding: 5px;
   margin: 5px 0;
   border-radius: 10px;
-  box-shadow: 5px;
   border-width: 1px;
   margin-bottom: 1%;
 }

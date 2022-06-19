@@ -32,7 +32,7 @@ public class ProductController {
         productService.updateProduct(product);
     }
 
-    @DeleteMapping(path = "/deleteproduct")
+    @PostMapping(path = "/deleteproduct")
     public void deleteProduct(@RequestBody Product product) {
         productService.deleteProduct(product);
     }

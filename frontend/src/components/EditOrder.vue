@@ -5,12 +5,17 @@
       <h2>{{formStatus}}</h2>
     </div>
     <btn-styled
-      @click="$router.push({ path: `/checkDetails/${orderID}` })"
-      class="backBtn"
-      ><font-awesome-icon class="fa" icon="arrow-left-long" />
+        @click="$router.push({ path: `/checkDetails/${orderID}` })"
+        class="backBtn"
+    >
+      <font-awesome-icon class="fa" icon="arrow-left-long"/>
+      Details
     </btn-styled>
     <btn-styled @click="$router.push({ path: `/orders` })" class="homeBtn"
-      >Orders</btn-styled
+    >
+      <font-awesome-icon class="fa" icon="arrow-left-long"/>
+      Orders
+    </btn-styled
     >
     <div class="form">
       <form @submit.prevent="submitForm">
@@ -129,7 +134,7 @@ h1 {
   z-index: 9999;
 }
 .fa {
-  transform: scale(1.5, 1.5);
+  transform: scale(1.0, 1.5);
 }
 .form {
   top: 15%;
@@ -164,6 +169,6 @@ select {
   position: absolute;
   left: 5%;
   top: 20%;
-  width: 12.5%;
+  width: 13%;
 }
 </style>

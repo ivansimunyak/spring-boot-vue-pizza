@@ -29,9 +29,9 @@
           </option>
         </select>
         <br /><br />
-        <label for="image">Image:</label><br />
-        <input required type="file" name="image" @change="handleFileUpload" />
-        <br />
+        <!--        <label for="image">Image:</label><br />-->
+        <!--        <input required type="file" name="image" @change="handleFileUpload" />-->
+        <!--        <br />-->
         <btn-styled type="submit">Submit</btn-styled>
       </form>
     </div>
@@ -65,24 +65,26 @@ export default {
   methods: {
     submitForm() {
       const fd = new FormData();
+      const addingCategory = {id: this.addingCategoryID};
       fd.append("name", this.addingName);
       fd.append("size", this.addingSize);
       fd.append("price", this.addingPrice);
-      fd.append("category_id", this.addingCategoryID);
-      fd.append("productImage", this.addingImage);
+      Object.entries(addingCategory).forEach(([key, value]) => {
+        fd.append(key, value);
+      });
+      // fd.append("productImage", this.addingImage);
       axios
-        .post("http://localhost:3000/api/products/addproduct", fd, {
-          headers: {
-            Authorization: "Bearer " + this.accessToken,
-          },
-        })
-        .then((res) => {
-          //Perform Success Action
-          console.log(res.data);
-          this.uniqueProductKey++;
-          this.$store.commit("increment");
-          alert("Product added!");
-        })
+          .post("http://localhost:8080/api/product/addproduct", fd, {
+            headers: {
+              Authorization: "Bearer " + this.accessToken,
+            },
+          })
+          .then(() => {
+            //Perform Success Action
+            this.uniqueProductKey++;
+            this.$store.commit("increment");
+            alert("Product added!");
+          })
         .catch((error) => {
           // error.response.status Check status code
           console.log(error.response.status);
@@ -93,7 +95,7 @@ export default {
     },
   },
   mounted() {
-    const url = "http://localhost:3000/api/productCategory/";
+    const url = "http://localhost:8080/api/productcategory";
     axios
       .get(url, {
         headers: {
@@ -146,18 +148,14 @@ export default {
 }
 input {
   padding: 5px;
-  margin: 5px 0;
   border-radius: 10px;
-  box-shadow: 5px;
   border-width: 1px;
-  margin-bottom: 1%;
+  margin: 5px 0 1%;
 }
 select {
   padding: 5px;
-  margin: 5px 0;
   border-radius: 10px;
-  box-shadow: 5px;
   border-width: 1px;
-  margin-bottom: 1%;
+  margin: 5px 0 1%;
 }
 </style>
