@@ -21,8 +21,8 @@ public class UserController {
     }
 
     @GetMapping(path = "/getuser/")
-    public User getUser(@RequestParam Long id) {
-        return userService.getUser(id);
+    public User getUser(@RequestParam String username) {
+        return userService.getUser(username);
     }
 
     @PostMapping(path = "/updateuser")

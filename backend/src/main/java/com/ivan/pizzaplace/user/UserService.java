@@ -19,8 +19,8 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User getUser(Long id) {
-        User userOptional = userRepository.findUserById(id);
+    public User getUser(String username) {
+        User userOptional = userRepository.findUserByUsername(username);
         if (userOptional != null) {
             return userOptional;
         } else {

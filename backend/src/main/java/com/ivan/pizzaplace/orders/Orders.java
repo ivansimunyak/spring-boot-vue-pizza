@@ -6,6 +6,7 @@ import com.ivan.pizzaplace.review.Review;
 import com.ivan.pizzaplace.user.User;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -21,8 +22,8 @@ public class Orders {
     private String status;
     private String adress;
     private String phoneNumber;
-    private Date orderDate;
-    private Date shippingDate;
+    private LocalDateTime orderDate;
+    private LocalDateTime shippingDate;
     private String customerComment;
     private String firstName;
     private String lastName;
@@ -37,8 +38,8 @@ public class Orders {
                   String status,
                   String adress,
                   String phoneNumber,
-                  Date orderDate,
-                  Date shippingDate,
+                  LocalDateTime orderDate,
+                  LocalDateTime shippingDate,
                   String customerComment,
                   String firstName,
                   String lastName,
@@ -60,8 +61,8 @@ public class Orders {
                   String status,
                   String adress,
                   String phoneNumber,
-                  Date orderDate,
-                  Date shippingDate,
+                  LocalDateTime orderDate,
+                  LocalDateTime shippingDate,
                   String customerComment,
                   String firstName,
                   String lastName,
@@ -119,19 +120,19 @@ public class Orders {
         this.phoneNumber = phoneNumber;
     }
 
-    public Date getOrderDate() {
+    public LocalDateTime getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(Date orderDate) {
+    public void setOrderDate(LocalDateTime orderDate) {
         this.orderDate = orderDate;
     }
 
-    public Date getShippingDate() {
+    public LocalDateTime getShippingDate() {
         return shippingDate;
     }
 
-    public void setShippingDate(Date shippingDate) {
+    public void setShippingDate(LocalDateTime shippingDate) {
         this.shippingDate = shippingDate;
     }
 

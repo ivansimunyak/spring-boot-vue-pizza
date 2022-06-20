@@ -1,6 +1,6 @@
 <template>
   <div class="info-form">
-    <h1>Checkout</h1>
+    <h1>Checkout{{ username }}</h1>
     <form @submit.prevent="submitForm">
       <div id="left-form">
         <input
@@ -11,41 +11,27 @@
           maxlength="44"
         /><br />
         <input
-          type="number"
-          placeholder="Phone Number"
-          v-model="userPhone"
-          name="phone"
-          max="2147483645"
-          min="0"
-        /><br />
+            type="number"
+            placeholder="Phone Number"
+            v-model="userPhone"
+            name="phone"
+            max="2147483645"
+            min="0"
+        /><br/>
         <input
-          type="text"
-          placeholder="Name"
-          v-model="userName"
-          name="name"
-          maxlength="44"
-        /><br />
-        <select name="location" required v-model="orderLocation">
-          <br />
-          <option value="" disabled>Select your location...</option>
-          <option
-            v-for="location in locations"
-            :key="location.id"
-            :value="location.id"
-          >
-            {{ location.locationName }}
-          </option></select
-        ><br />
-        <select name="payment_method" required v-model="paymentMethod">
-          <option value="" disabled>Select payment method...</option>
-          <option
-            v-for="method in paymethods"
-            :key="method.id"
-            :value="method.id"
-          >
-            {{ method.name }}
-          </option></select
-        ><br />
+            type="text"
+            placeholder="First Name"
+            v-model="firstName"
+            name="first-name"
+            maxlength="44"
+        /><br/>
+        <input
+            type="text"
+            placeholder="Last Name"
+            v-model="lastName"
+            name="last-name"
+            maxlength="44"
+        /><br/>
       </div>
       <div id="right-form">
         <textarea
@@ -78,14 +64,14 @@
       <tbody>
         <tr v-for="(product, index) in products" :key="index">
           <td>
-            <img
-              id="product-image"
-              :src="require(`../assets/${product.picture}`)"
-            />
+            <!--            <img-->
+            <!--              id="product-image"-->
+            <!--              :src="require(`../assets/${product.picture}`)"-->
+            <!--            />-->
           </td>
-          <td>{{ product.product_name }}</td>
+          <td>{{ product.name }}</td>
           <td>{{ product.size }}</td>
-          <td>{{ product.category_name }}</td>
+          <td>{{ product.productCategory.name }}</td>
           <td>{{ product.price }}</td>
           <td>{{ product.quantity }}</td>
           <td>{{ product.price * product.quantity }}</td>
@@ -103,12 +89,14 @@ export default {
       paymentMethod: "",
       orderLocation: "",
       locations: [],
-      userName: "",
+      firstName: "",
+      lastName: "",
       userAdress: "",
       userPhone: "",
       userComments: "",
       orderID: "",
       cartProducts: [],
+      user: {}
     };
   },
   computed: {
@@ -118,8 +106,8 @@ export default {
     total() {
       return this.$store.getters.cartTotal;
     },
-    user() {
-      return this.$store.getters.user;
+    username() {
+      return this.$store.getters.username;
     },
     accessToken() {
       return this.$store.getters.accessToken;
@@ -127,25 +115,18 @@ export default {
   },
   mounted() {
     if (this.products.length > 0) {
-      this.orderID = this.products[0].order_id;
       axios.defaults.headers.common["Authorization"] =
-        "Bearer " + this.accessToken;
-      const url = "http://localhost:3000/api/paymentMethod/forall";
-      axios.get(url).then((response) => {
-        this.paymethods = response.data;
-      });
-      const url1 = "http://localhost:3000/api/location/forall";
-      axios.get(url1).then((response) => {
-        this.locations = response.data;
-      });
-      if (this.$store.getters.user != null) {
-        const url2 =
-          "http://localhost:3000/api/user/oneuser/" +
-          this.$store.getters.user.user_id;
-        axios.get(url2).then((response) => {
-          this.userAdress = response.data[0].adress;
-          this.userPhone = response.data[0].phone_number;
-          this.userName = response.data[0].user_name;
+          "Bearer " + this.accessToken;
+      if (this.$store.getters.username != null) {
+        const url =
+            "http://localhost:8080/api/user/getuser/?username=" +
+            this.$store.getters.username;
+        axios.get(url).then((response) => {
+          this.user = response.data;
+          this.userAdress = response.data.adress;
+          this.userPhone = response.data.phoneNumber;
+          this.firstName = response.data.firstName;
+          this.lastName = response.data.lastName;
         });
       }
     } else {
@@ -154,48 +135,55 @@ export default {
   },
   methods: {
     submitForm() {
-      if (this.$store.getters.user != null) {
+      if (this.$store.getters.username != null) {
         axios.defaults.headers.common["Authorization"] =
-          "Bearer " + this.accessToken;
+            "Bearer " + this.accessToken;
         axios
 
-          .post("http://localhost:3000/api/orders/insertorder", {
-            location_id: this.orderLocation,
-            user_id: this.$store.getters.user.user_id,
-            adress: this.userAdress,
-            phone_number: this.userPhone,
-            comments: this.userComments,
-            payment_method_id: this.paymentMethod,
-            name: this.userName,
-          })
+            .post("http://localhost:8080/api/orders/addorder", {
+              customer: {id: this.user.id},
+              adress: this.userAdress,
+              phoneNumber: this.userPhone,
+              customerComment: this.userComments,
+              firstName: this.firstName,
+              lastName: this.lastName,
+            })
           .then((response) => {
             console.log(response);
             return axios.get(
-              "http://localhost:3000/api/orders/getlatestorder/" +
-                this.$store.getters.user.user_id
+                "http://localhost:8080/api/orders/getlatestorder/?id=" +
+                this.user.id
             );
           })
           .then((response) => {
-            this.orderID = response.data[0].id;
+            this.orderID = response.data.id;
             this.products.forEach((product) => {
-              product["order_id"] = response.data[0].id;
+              product["order_id"] = response.data.id;
             });
-            for (var i = 0; i < this.products.length; i++) {
+            for (let i = 0; i < this.products.length; i++) {
               this.cartProducts.push({
-                order_id: this.products[i].order_id,
-                product_id: this.products[i].id,
+                ordersProductId: {
+                  order_id: this.products[i].order_id,
+                  product_id: this.products[i].id,
+                },
                 quantity: this.products[i].quantity,
               });
             }
             return axios.post(
-              "http://localhost:3000/api/orders/insertorderproducts",
-              { array: this.cartProducts }
+                "http://localhost:8080/api/ordersproduct/addordersproduct",
+                {
+                  ordersProductId: {
+                    ordersId: this.products[0].order_id,
+                    productId: this.products[0].id,
+                  },
+                  quantity: this.products[0].quantity
+                }
             );
           })
           .then((response) => {
-            if (response.status == 200) {
+            if (response.status === 200) {
               this.$store.commit("resetCart");
-              this.$router.push({ path: `/profileorder/${this.orderID}` });
+              this.$router.push({path: `/profileorder/${this.orderID}`});
             }
           })
           .catch((error) => console.log(error));
@@ -205,42 +193,43 @@ export default {
           "Bearer " + this.accessToken;
         axios
 
-          .post("http://localhost:3000/api/orders/insertorder", {
-            location_id: this.orderLocation,
-            user_id: guestID,
-            adress: this.userAdress,
-            phone_number: this.userPhone,
-            comments: this.userComments,
-            payment_method_id: this.paymentMethod,
-            name: this.userName,
-          })
+            .post("http://localhost:8080/api/orders/addorder", {
+              customer: {id: guestID},
+              adress: this.userAdress,
+              phoneNumber: this.userPhone,
+              customerComment: this.userComments,
+              firstName: this.firstName,
+              lastName: this.lastName
+            })
           .then((response) => {
             console.log(response);
             return axios.get(
-              "http://localhost:3000/api/orders/getlatestorder/" + guestID
+                "http://localhost:8080/api/orders/getlatestorder/?id=" + guestID
             );
           })
           .then((response) => {
-            this.orderID = response.data[0].id;
+            this.orderID = response.data.id;
             this.products.forEach((product) => {
               product["order_id"] = response.data[0].id;
             });
             for (var i = 0; i < this.products.length; i++) {
               this.cartProducts.push({
-                order_id: this.products[i].order_id,
-                product_id: this.products[i].id,
+                ordersProductId: {
+                  order_id: this.products[i].order_id,
+                  product_id: this.products[i].id,
+                },
                 quantity: this.products[i].quantity,
               });
             }
             return axios.post(
-              "http://localhost:3000/api/orders/insertorderproducts",
-              { array: this.cartProducts }
+                "http://localhost:8080/api/ordersproduct/addordersproduct",
+                {array: this.cartProducts}
             );
           })
           .then((response) => {
-            if (response.status == 200) {
+            if (response.status === 200) {
               this.$store.commit("resetCart");
-              this.$router.push({ path: `/` });
+              this.$router.push({path: `/`});
             }
           })
           .catch((error) => console.log(error));
@@ -260,10 +249,8 @@ export default {
   position: relative;
   width: 80%;
   height: 400px;
-  margin: 0px;
   top: 10%;
-  margin-left: 10%;
-  margin-right: 10%;
+  margin: 0px 10%;
   border-style: outset;
   border-color: #a80000;
 }
@@ -280,15 +267,13 @@ export default {
   border-collapse: collapse;
   table-layout: fixed;
   color: #333;
-  margin: 25px 0;
   font-size: 0.9em;
   padding: 0;
   font-family: sans-serif;
   min-width: 400px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   text-align: center;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 25px auto;
   border-color: #a80000;
   width: 85%;
 }
@@ -319,14 +304,12 @@ input {
   padding: 5px;
   margin: 5px 0;
   border-radius: 10px;
-  box-shadow: 5px;
   border-width: 1px;
 }
 select {
   padding: 5px;
   margin: 5px 0;
   border-radius: 10px;
-  box-shadow: 5px;
   border-width: 1px;
   width: 220px;
 }
@@ -342,7 +325,6 @@ textarea {
   height: 125px;
   margin: 5px 0;
   border-radius: 10px;
-  box-shadow: 5px;
   border-width: 1px;
 }
 </style>

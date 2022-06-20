@@ -12,8 +12,8 @@
         </tr>
 
         <tr>
-          <th>Imffage</th>
-          <th>NaMIOLIMTETme</th>
+          <th>Image</th>
+          <th>Name</th>
           <th>Size</th>
           <th>Category</th>
           <th>Price</th>
@@ -25,14 +25,14 @@
       <tbody>
         <tr v-for="(product, index) in products" :key="index">
           <td>
-            <img
-              id="product-image"
-              :src="require(`../assets/${product.picture}`)"
-            />
+            <!--            <img-->
+            <!--              id="product-image"-->
+            <!--              :src="require(`../assets/${product.picture}`)"-->
+            <!--            />-->
           </td>
-          <td>{{ product.product_name }}</td>
+          <td>{{ product.name }}</td>
           <td>{{ product.size }}</td>
-          <td>{{ product.category_name }}</td>
+          <td>{{ product.productCategory.name }}</td>
           <td>{{ product.price }}</td>
           <td>
             <button class="quantity-btn" @click="decreaseQuantity(product)">

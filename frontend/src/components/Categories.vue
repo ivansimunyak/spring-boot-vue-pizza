@@ -1,5 +1,5 @@
 <template>
-  <h1 id="categoriesHeader">Categories</h1>
+  <h1 id="categoriesHeader">Categories {{ editID }}</h1>
   <section class="categoriesTable">
     <table>
       <thead>
@@ -62,7 +62,7 @@ export default {
     },
   },
   mounted() {
-    const url = "http://localhost:3000/api/productCategory/";
+    const url = "http://localhost:8080/api/productcategory";
     axios
       .get(url, {
         headers: {
@@ -77,12 +77,12 @@ export default {
     removeCategory(id, index) {
       axios
         .post(
-          "http://localhost:3000/api/productCategory/removecategory/" + id,
-          {
-            headers: {
-              Authorization: "Bearer " + this.accessToken,
-            },
-          }
+            "http://localhost:8080/api/productcategory/deleteproductcategory/", {id: id},
+            {
+              headers: {
+                Authorization: "Bearer " + this.accessToken,
+              },
+            }
         )
         .then((res) => {
           //Perform Success Action
@@ -97,24 +97,23 @@ export default {
     },
     editCategoryForm() {
       axios
-        .post(
-          "http://localhost:3000/api/productCategory/editcategory",
-          { name: this.editName, id: this.editID },
-          {
-            headers: {
-              Authorization: "Bearer " + this.accessToken,
-            },
-          }
-        )
-        .then((res) => {
-          //Perform Success Action
-          console.log(res.data);
-          this.categories.splice(this.saveIndex, 1, {
-            name: this.editName,
-            id: this.editID,
-          });
-          alert("Category edited successfully!");
-        })
+          .post(
+              "http://localhost:8080/api/productcategory/updateproductcategory",
+              {id: this.editID, name: this.editName},
+              {
+                headers: {
+                  Authorization: "Bearer " + this.accessToken,
+                },
+              }
+          )
+          .then(() => {
+            //Perform Success Action
+            this.categories.splice(this.saveIndex, 1, {
+              name: this.editName,
+              id: this.editID,
+            });
+            alert("Category edited successfully!");
+          })
 
         .catch((error) => {
           // error.response.status Check status code
@@ -143,14 +142,12 @@ input[type="text"] {
   padding: 5px;
   margin: 5px 0;
   border-radius: 10px;
-  box-shadow: 5px;
   border-width: 1px;
 }
 input[type="number"] {
   padding: 5px;
   margin: 5px 0;
   border-radius: 10px;
-  box-shadow: 5px;
   border-width: 1px;
 }
 
@@ -172,7 +169,6 @@ input[type="number"] {
   border-color: #a80000;
 }
 .categoriesTable {
-  border: 1px solid #999;
   border-radius: 1px;
   color: #333;
   background: white;

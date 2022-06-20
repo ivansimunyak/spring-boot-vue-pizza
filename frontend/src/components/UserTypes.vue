@@ -30,16 +30,16 @@
   <h2 id="editType">Edit type</h2>
   <div class="edit">
     <form class="form" @submit.prevent="editTypeForm">
-      <label for="id">ID:</label><br />
-      <input type="number" requiredname="editID" v-model="editID" /><br />
-      <label for="fname">Name:</label><br />
+      <label for="id">ID:</label><br/>
+      <input type="number" required name="editID" v-model="editID"/><br/>
+      <label for="fname">Name:</label><br/>
       <input
-        type="text"
-        id="editID"
-        required
-        name="editName"
-        v-model="editName"
-      /><br />
+          type="text"
+          id="editID"
+          required
+          name="editName"
+          v-model="editName"
+      /><br/>
       <btn-styled type="submit">Submit</btn-styled>
     </form>
   </div>
@@ -64,7 +64,7 @@ export default {
   mounted() {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + this.accessToken;
-    const url = "http://localhost:3000/api/userType/";
+    const url = "http://localhost:8080/api/usertype";
     axios
       .get(url, {
         headers: {
@@ -78,26 +78,24 @@ export default {
   methods: {
     editTypeForm() {
       axios
-        .post(
-          "http://localhost:3000/api/userType/edittype",
-          { name: this.editName, id: this.editID },
-          {
-            headers: {
-              Authorization: "Bearer " + this.accessToken,
-            },
-          }
-        )
-        .then((res) => {
-          //Perform Success Action
-          console.log(res.data);
-          this.types.splice(this.saveIndex, 1, {
-            name: this.editName,
-            id: this.editID,
-          });
-          alert("Type edited successfully!");
-        })
+          .post(
+              "http://localhost:8080/api/usertype/editusertype",
+              {name: this.editName, id: this.editID},
+              {
+                headers: {
+                  Authorization: "Bearer " + this.accessToken,
+                },
+              }
+          )
+          .then(() => {
+            //Perform Success Action
+            this.types.splice(this.saveIndex, 1, {
+              name: this.editName,
+              id: this.editID,
+            });
+            alert("Type edited successfully!");
+          })
         .catch((error) => {
-          // error.response.status Check status code
           console.log(error.response.status);
         });
     },
@@ -108,19 +106,20 @@ export default {
     },
     removeType(id, index) {
       axios
-        .post("http://localhost:3000/api/userType/removetype/" + id, {
-          headers: {
-            Authorization: "Bearer " + this.accessToken,
-          },
-        })
-        .then((res) => {
-          //Perform Success Action
-          console.log(res.data);
-          this.types.splice(index, 1);
-          alert("Type removed!");
-        })
+          .post(
+              "http://localhost:8080/api/usertype/deleteusertype",
+              {id: id},
+              {
+                headers: {
+                  Authorization: "Bearer " + this.accessToken,
+                },
+              }
+          )
+          .then(() => {
+            this.types.splice(index, 1);
+            alert("Type removed!");
+          })
         .catch((error) => {
-          // error.response.status Check status code
           console.log(error.response.status);
         });
     },
@@ -129,7 +128,6 @@ export default {
 </script>
 <style scoped>
 .typesTable {
-  border: 1px solid #999;
   border-radius: 1px;
   color: #333;
   background: white;
@@ -171,7 +169,7 @@ td {
   position: absolute;
   top: 55%;
   left: 50%;
-  font-family: "Bookerly";
+  font-family: "Bookerly", Times, serif;
   color: black;
   border-style: groove;
   width: 30%;
@@ -182,7 +180,6 @@ input {
   padding: 5px;
   margin: 5px 0;
   border-radius: 10px;
-  box-shadow: 5px;
   border-width: 1px;
 }
 </style>

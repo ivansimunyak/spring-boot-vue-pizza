@@ -27,10 +27,11 @@ public class ProductCategoryController {
 
     @PostMapping(path = "/updateproductcategory")
     public void updateExistingCategory(@RequestBody ProductCategory productCategory) {
+        System.out.println(productCategory.toString());
         productCategoryService.updateProductCategory(productCategory);
     }
 
-    @DeleteMapping(path = "/deleteproductcategory")
+    @PostMapping(path = "/deleteproductcategory")
     public void deleteProductCategory(@RequestBody ProductCategory productCategory) {
         productCategoryService.deleteProductCategory(productCategory);
     }

@@ -1,6 +1,7 @@
 package com.ivan.pizzaplace.orders;
 
 import com.ivan.pizzaplace.orders_product.OrdersProduct;
+import com.ivan.pizzaplace.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,5 +46,10 @@ public class OrdersController {
     @PostMapping(path = "/deleteorder/")
     public void deleteOrder(@RequestParam Long id) {
         ordersService.deleteOrders(id);
+    }
+
+    @GetMapping(path = "/getlatestorder/")
+    public Optional<Orders> getLatestOrder(@RequestParam Long id) {
+        return ordersService.findLatestOrder(id);
     }
 }

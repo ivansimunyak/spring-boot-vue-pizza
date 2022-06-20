@@ -28,7 +28,7 @@ public class UserTypeController {
         userTypeService.updateUserType(userType);
     }
 
-    @DeleteMapping(path = "/deleteusertype")
+    @PostMapping(path = "/deleteusertype")
     public void deleteUserType(@RequestBody UserType userType) {
         userTypeService.removeUserType(userType);
     }

@@ -48,21 +48,21 @@ export default createStore({
       if (record) {
         record.quantity++;
       } else {
-        product.quantity = 1;
-        state.cart.push(product);
+          product.quantity = 1;
+          state.cartCount++;
+          state.cart.push(product);
       }
-      state.cartCount++;
     },
     removeCartItem(state, item) {
-      const record = state.cart.find((element) => element.id == item.id);
+        const record = state.cart.find((element) => element.id === item.id);
       state.cart.splice(state.cart.indexOf(record), 1);
     },
     decreaseQuantity(state, item) {
       const record = state.cart.find((element) => element.id == item.id);
       record.quantity--;
-      state.cartCount--;
       if (record.quantity === 0) {
-        state.cart.splice(state.cart.indexOf(record), 1);
+          state.cartCount--;
+          state.cart.splice(state.cart.indexOf(record), 1);
       }
     },
     increaseQuantity(state, item) {

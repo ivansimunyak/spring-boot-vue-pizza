@@ -15,10 +15,6 @@ public class ProductCategory {
     private Long id;
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id")
-    @JsonIgnore
-    private List<Product> products;
 
     public ProductCategory() {
     }
@@ -48,20 +44,12 @@ public class ProductCategory {
         this.name = name;
     }
 
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
 
     @Override
     public String toString() {
         return "ProductCategory{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", products=" + products +
                 '}';
     }
 }

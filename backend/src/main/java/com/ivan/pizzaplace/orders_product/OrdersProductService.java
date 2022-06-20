@@ -25,6 +25,7 @@ public class OrdersProductService {
         if (optionalOrdersProduct.isPresent()) {
             throw new IllegalStateException("Error id exists!");
         }
+        System.out.println(ordersProduct);
         ordersProductRepository.save(ordersProduct);
     }
 

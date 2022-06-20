@@ -32,24 +32,21 @@ export default {
   methods: {
     submitForm() {
       axios
-        .post(
-          "http://localhost:3000/api/userType/addtype",
-          { name: this.addingName },
-          {
-            headers: {
-              Authorization: "Bearer " + this.accessToken,
-            },
-          }
-        )
-        .then((res) => {
-          //Perform Success Action
-          console.log(res.data);
-          this.uniqueTypeKey++;
-          this.addingName = "";
-          alert("User type added!");
-        })
+          .post(
+              "http://localhost:8080/api/usertype/addusertype",
+              {name: this.addingName},
+              {
+                headers: {
+                  Authorization: "Bearer " + this.accessToken,
+                },
+              }
+          )
+          .then(() => {
+            this.uniqueTypeKey++;
+            this.addingName = "";
+            alert("User type added!");
+          })
         .catch((error) => {
-          // error.response.status Check status code
           console.log(error.response.status);
         });
     },
@@ -62,10 +59,8 @@ export default {
   position: absolute;
   width: 80%;
   height: 100%;
-  margin: 0px;
   top: 10%;
-  margin-left: 10%;
-  margin-right: 10%;
+  margin: 0 10%;
   border-style: outset;
   border-color: #a80000;
 }
@@ -78,7 +73,7 @@ export default {
   top: 1%;
 }
 .addType {
-  font-family: "Bookerly";
+  font-family: "Bookerly", Times, serif;
   color: black;
   border-style: groove;
   width: 30%;
@@ -97,7 +92,6 @@ input[type="text"] {
   padding: 5px;
   margin: 5px 0;
   border-radius: 10px;
-  box-shadow: 5px;
   border-width: 1px;
 }
 </style>
