@@ -169,18 +169,18 @@ export default {
       );
       axios
         .post(
-          "http://localhost:8080/api/user/updateuser",
-          { id: user.id, userType:{id:record.id, name:record.name } },
-          {
-            headers: {
-              Authorization: "Bearer " + this.accessToken,
-            },
-          }
+            "http://localhost:8080/api/user/updateuser",
+            {id: user.id, userType: {id: record.id, name: record.name}},
+            {
+              headers: {
+                Authorization: "Bearer " + this.accessToken,
+              },
+            }
         )
         .then(() => {
           this.users.splice(index, 1, {
             id: user.id,
-            userType:{id:record.id,name:record.name},
+            userType: {id: record.id, name: record.name},
             username: user.username,
             email: user.email,
             phoneNumber: user.phoneNumber,
@@ -194,7 +194,6 @@ export default {
       axios
         .post("http://localhost:8080/api/user/deleteuser", { id: id })
         .then((res) => {
-
           console.log(res.data);
           this.users.splice(index, 1);
         })

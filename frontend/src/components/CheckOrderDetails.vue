@@ -3,7 +3,7 @@
     <div id="header">
       <h1>Order Details</h1>
       <h2>Order ID {{ orderID }}</h2>
-      <p>{{ordersProduct}}</p>
+      <p>{{ ordersProduct }}</p>
     </div>
     <btn-styled class="btnDelete" @click="removeOrder">Delete Order</btn-styled>
     <btn-styled
@@ -36,7 +36,7 @@
         <br />
         <li>Adress: {{ orderDetails.adress }}</li>
         <br />
-        <li>Email: {{userEmail}}</li>
+        <li>Email: {{ userEmail }}</li>
       </ul>
     </div>
     <div class="right-list">
@@ -46,7 +46,7 @@
         <li>Order Sent: {{ this.format_date(orderDetails.orderDate) }}</li>
         <br/>
         <li>Order Status: {{ orderDetails.status }}</li>
-        <br>
+        <br/>
         <li>Comments: {{ orderDetails.customerComment }}</li>
       </ul>
     </div>
@@ -65,7 +65,7 @@
         <tbody>
         <tr v-for="(orderProduct, index) in orderProducts" :key="index">
           <td>
-              {{ orderProduct.product.name }}
+            {{ orderProduct.product.name }}
           </td>
           <td>
             {{ orderProduct.product.size }}
@@ -96,8 +96,7 @@ export default {
       orderProducts: [],
       orderDetails: [],
       orderDate: 0,
-      userEmail:null
-
+      userEmail: null,
     };
   },
   computed: {
@@ -117,10 +116,10 @@ export default {
         },
       })
       .then((response) => {
-        console.log(response.data)
+        console.log(response.data);
         this.orderDetails = response.data;
-        this.orderProducts= response.data.ordersProducts;
-        this.userEmail=response.data.customer.email;
+        this.orderProducts = response.data.ordersProducts;
+        this.userEmail = response.data.customer.email;
       });
     this.format_date(this.whenMade);
   },
@@ -149,7 +148,7 @@ export default {
       axios
         .post("http://localhost:8080/api/orders/updateorderstatus", {
           id: this.orderID,
-          status: "Delivered"
+          status: "Delivered",
         })
         .then(() => {
           //Perform Success Action
@@ -167,7 +166,7 @@ export default {
       axios
         .post("http://localhost:8080/api/orders/updateorderstatus", {
           id: this.orderID,
-          status: "Canceled"
+          status: "Canceled",
         })
         .then(() => {
           //Perform Success Action
@@ -303,7 +302,6 @@ ul {
   padding: 5px;
   margin: 5px 0;
   border-radius: 15px;
-
 }
 .right-list ul {
   margin-top: 1%;

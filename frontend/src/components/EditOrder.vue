@@ -2,7 +2,7 @@
   <div class="wrapper">
     <div class="header">
       <h1>Edit Order ID {{ orderID }}</h1>
-      <h2>{{formStatus}}</h2>
+      <h2>{{ formStatus }}</h2>
     </div>
     <btn-styled
         @click="$router.push({ path: `/checkDetails/${orderID}` })"
@@ -11,26 +11,29 @@
       <font-awesome-icon class="fa" icon="arrow-left-long"/>
       Details
     </btn-styled>
-    <btn-styled @click="$router.push({ path: `/orders` })" class="homeBtn"
-    >
+    <btn-styled @click="$router.push({ path: `/orders` })" class="homeBtn">
       <font-awesome-icon class="fa" icon="arrow-left-long"/>
       Orders
-    </btn-styled
-    >
+    </btn-styled>
     <div class="form">
       <form @submit.prevent="submitForm">
-        <label for="fname">Name:</label><br />
-        <input type="text" required name="name" v-model="userData.firstName" /><br />
-        <label for="lname">Adress:</label><br />
+        <label for="fname">Name:</label><br/>
         <input
-          type="text"
-          required
-          name="adress"
-          v-model="userData.adress"
-        /><br />
-        <label for="phone">Phone:</label><br />
+            type="text"
+            required
+            name="name"
+            v-model="userData.firstName"
+        /><br/>
+        <label for="lname">Adress:</label><br/>
         <input
-          type="number"
+            type="text"
+            required
+            name="adress"
+            v-model="userData.adress"
+        /><br/>
+        <label for="phone">Phone:</label><br/>
+        <input
+            type="number"
           required
           name="phone_number"
           v-model="userData.phoneNumber"
@@ -61,7 +64,7 @@ export default {
   props: ["orderID"],
   data() {
     return {
-      userData:[],
+      userData: [],
       formStatus: "",
       resetName: "",
     };
@@ -74,8 +77,8 @@ export default {
             Authorization: "Bearer " + this.accessToken,
           },
         })
-      .then((response) => {
-        this.userData=response.data;
+        .then((response) => {
+          this.userData = response.data;
         });
   },
   computed: {
@@ -134,7 +137,7 @@ h1 {
   z-index: 9999;
 }
 .fa {
-  transform: scale(1.0, 1.5);
+  transform: scale(1, 1.5);
 }
 .form {
   top: 15%;

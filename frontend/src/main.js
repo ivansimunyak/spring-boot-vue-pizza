@@ -6,13 +6,13 @@ import BaseDialog from "./components/UI/BaseDialog.vue";
 import BtnStyled from "./components/BtnStyled.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
-  faHome,
-  faList,
-  faArrowRight,
-  faUser,
-  faInbox,
-  faUsers,
-  faPlusCircle,
+    faHome,
+    faList,
+    faArrowRight,
+    faUser,
+    faInbox,
+    faUsers,
+    faPlusCircle,
     faMinusCircle,
     faBuilding,
     faWallet,
@@ -23,7 +23,8 @@ import {
     faClipboardList,
     faCartShopping,
     faArrowLeftLong,
-    faUserGear, faArrowLeft,
+    faUserGear,
+    faArrowLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import axios from "axios";
@@ -45,10 +46,10 @@ library.add(
     faBuilding,
     faLocationArrow,
     faMessage,
-  faArrowRightToBracket,
-  faArrowRightFromBracket,
-  faClipboardList,
-  faCartShopping
+    faArrowRightToBracket,
+    faArrowRightFromBracket,
+    faClipboardList,
+    faCartShopping
 );
 app.use(store);
 app.use(router);

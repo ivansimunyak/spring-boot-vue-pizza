@@ -54,9 +54,9 @@ export default {
           console.log(res.data.authorities[0].authority);
           const accessToken = res.data.jwttoken;
           const username = res.data.username;
-          if (res.data.authorities[0].authority==="ROLE_Admin") {
+          if (res.data.authorities[0].authority === "ROLE_Admin") {
             this.setAdmin(true);
-          }else if(res.data.authorities[0].authority==="ROLE_Employee"){
+          } else if (res.data.authorities[0].authority === "ROLE_Employee") {
             this.setEmployee(true);
           }
           this.setUsername(username);
@@ -65,7 +65,7 @@ export default {
         })
         .catch((error) => {
           this.errorMsg = "Wrong email or password!";
-          console.log(error+"hey");
+          console.log(error + "hey");
         });
     },
   },

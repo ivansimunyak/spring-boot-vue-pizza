@@ -4,12 +4,12 @@
     <form @submit.prevent="submitForm">
       <div id="left-form">
         <input
-          type="text"
-          placeholder="Adress"
-          v-model="userAdress"
-          name="adress"
-          maxlength="44"
-        /><br />
+            type="text"
+            placeholder="Adress"
+            v-model="userAdress"
+            name="adress"
+            maxlength="44"
+        /><br/>
         <input
             type="number"
             placeholder="Phone Number"
@@ -96,7 +96,7 @@ export default {
       userComments: "",
       orderID: "",
       cartProducts: [],
-      user: {}
+      user: {},
     };
   },
   computed: {
@@ -176,7 +176,7 @@ export default {
                     ordersId: this.products[0].order_id,
                     productId: this.products[0].id,
                   },
-                  quantity: this.products[0].quantity
+                  quantity: this.products[0].quantity,
                 }
             );
           })
@@ -199,7 +199,7 @@ export default {
               phoneNumber: this.userPhone,
               customerComment: this.userComments,
               firstName: this.firstName,
-              lastName: this.lastName
+              lastName: this.lastName,
             })
           .then((response) => {
             console.log(response);

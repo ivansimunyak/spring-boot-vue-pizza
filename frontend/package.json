@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "dev": "npx nodemon  server/server.js -w server"
+    "dev": "npx nodemon  server/server.js -w server",
+    "lint:fix": "eslint --fix --ext .vue ."
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.36",

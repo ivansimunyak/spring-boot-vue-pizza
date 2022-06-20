@@ -77,7 +77,8 @@ export default {
     removeCategory(id, index) {
       axios
         .post(
-            "http://localhost:8080/api/productcategory/deleteproductcategory/", {id: id},
+            "http://localhost:8080/api/productcategory/deleteproductcategory/",
+            {id: id},
             {
               headers: {
                 Authorization: "Bearer " + this.accessToken,

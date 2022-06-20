@@ -1,6 +1,6 @@
 <template>
   <h1>{{ statusMsg }}</h1>
-  <p>{{orders[0]}}</p>
+  <p>{{ orders[0] }}</p>
   <p class="error" v-if="error">{{ error }}</p>
   <table class="table">
     <thead>
@@ -27,7 +27,7 @@
             class="btnEdit"
             @click="
               $router.push({
-                path: `/editorder/${order.id}`
+                path: `/editorder/${order.id}`,
               })
             "
             >Edit</btn-styled

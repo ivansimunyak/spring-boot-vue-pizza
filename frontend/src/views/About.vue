@@ -5,8 +5,8 @@
       <p>
         Welcome to Big Pizza, your number one source for the tastiest pizza
         there is . We're dedicated to giving you the very best of authentic
-        Italian pizza,<br/>{{ 15 }}
-        with a focus on authenticity, deliciousness, and reliability.<br/>
+        Italian pizza,<br/>{{ 15 }} with a focus on authenticity,
+        deliciousness, and reliability.<br/>
         Founded in 1998 by a group of enthusiasts and pizza lovers, Big Pizza
         has come a long way from its humble beginnings in a garage.<br/>
         When Big Joe first started out, his/her passion for making the best
@@ -17,7 +17,7 @@
         of the tradional wing of the pizza industry. We hope you enjoy our
         products as much as we enjoy offering them to you. <br/>If you have any
         questions or comments, please don't hesitate to contact us.
-        <br />
+        <br/>
         Sincerely, Steve Jobs, CEO
       </p>
     </div>

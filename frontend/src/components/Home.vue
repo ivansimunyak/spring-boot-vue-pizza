@@ -41,7 +41,7 @@
     <table>
       <thead>
         <tr>
-<!--          <th>Image</th>-->
+          <!--          <th>Image</th>-->
           <th>Name</th>
           <th>Size</th>
           <th>Category</th>
@@ -51,12 +51,12 @@
       </thead>
       <tbody>
         <tr v-for="(product, index) in products" :key="index">
-<!--          <td v-if="product.productCategory.name === selectedCategory">-->
-<!--            <img-->
-<!--              id="product-image"-->
-<!--              :src="require(`../assets/${product.picture}`)"-->
-<!--            />-->
-<!--          </td>-->
+          <!--          <td v-if="product.productCategory.name === selectedCategory">-->
+          <!--            <img-->
+          <!--              id="product-image"-->
+          <!--              :src="require(`../assets/${product.picture}`)"-->
+          <!--            />-->
+          <!--          </td>-->
           <td v-if="product.productCategory.name === selectedCategory">
             {{ product.name }}
           </td>

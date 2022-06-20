@@ -33,7 +33,7 @@
                   product.price,
                   product.productCategory.id,
                   product.size,
-                  index,
+                  index
                   // product.picture
                 )
               "
@@ -43,12 +43,15 @@
           <td>
             <btn-styled
                 class="btnDelete"
-                @click="removeProduct(product.id,
-               // product.picture,
-                index)"
+                @click="
+                removeProduct(
+                  product.id,
+                  // product.picture,
+                  index
+                )
+              "
             >Remove
-            </btn-styled
-            >
+            </btn-styled>
           </td>
         </tr>
       </tbody>
@@ -226,8 +229,8 @@ export default {
               {
                 headers: {
                   Authorization: "Bearer " + this.accessToken,
-              },
-            }
+                },
+              }
           )
           .then((res) => {
             //Perform Success Action
