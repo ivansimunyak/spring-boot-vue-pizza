@@ -1,9 +1,10 @@
 package com.ivan.pizzaplace.orders_product;
 
-import com.ivan.pizzaplace.user.User;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,13 +21,8 @@ public class OrdersProductService {
         return ordersProductRepository.findAll();
     }
 
-    public void insertNewOrdersProduct(OrdersProduct ordersProduct) {
-        Optional<OrdersProduct> optionalOrdersProduct = ordersProductRepository.findOrdersProductById(ordersProduct.getOrdersProductId().getOrdersId(), ordersProduct.getOrdersProductId().getProductId());
-        if (optionalOrdersProduct.isPresent()) {
-            throw new IllegalStateException("Error id exists!");
-        }
-        System.out.println(ordersProduct);
-        ordersProductRepository.save(ordersProduct);
+    public void insertNewOrdersProduct(Collection<OrdersProduct> ordersProduct) {
+        ordersProductRepository.saveAll(ordersProduct);
     }
 
     public void updateOrdersProduct(OrdersProduct ordersProduct) {

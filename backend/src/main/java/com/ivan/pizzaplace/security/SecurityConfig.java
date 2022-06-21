@@ -41,20 +41,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // We don't need CSRF for this example
         http.csrf().disable().
                 cors().configurationSource(corsConfigurationSource()).and()
-                // dont authenticate this particular request
-                .authorizeRequests().antMatchers("/login", "/register", "/api/product", "/api/productcategory").permitAll().
-                antMatchers("/api/user", "/api/user/getuser/", "/api/usertype", "/api/reviews/deletereview").hasRole("Admin").
-                // all other requests need to be authenticated
-                        antMatchers("/error").permitAll()
+                .authorizeRequests().antMatchers("/login",
+                        "/register",
+                        "/api/product",
+                        "/api/productcategory",
+                        "/api/orders/**",
+                        "/api/ordersproduct/**").permitAll().
+                antMatchers("/api/user",
+                        "/api/user/getuser/",
+                        "/api/usertype",
+                        "/api/reviews/deletereview").hasRole("Admin").
+
+                antMatchers("/error").permitAll()
                 .antMatchers("/error/**").permitAll().
                 anyRequest().authenticated().and().
-                // make sure we use stateless session; session won't be used to
-                        exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
+                exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).
+                and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        // Add a filter to validate the tokens with every request
+
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
@@ -62,7 +68,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity webSecurity) throws Exception {
         webSecurity
                 .ignoring()
-                // All of Spring Security will ignore the requests
                 .antMatchers("/error/**");
     }
 

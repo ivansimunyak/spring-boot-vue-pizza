@@ -1,6 +1,6 @@
 <template>
   <div class="info-form">
-    <h1>Checkout{{ username }}</h1>
+    <h1>Checkout{{ cartProducts }}</h1>
     <form @submit.prevent="submitForm">
       <div id="left-form">
         <input
@@ -82,13 +82,10 @@
 </template>
 <script>
 import axios from "axios";
+
 export default {
   data() {
     return {
-      paymethods: [],
-      paymentMethod: "",
-      orderLocation: "",
-      locations: [],
       firstName: "",
       lastName: "",
       userAdress: "",
@@ -115,9 +112,9 @@ export default {
   },
   mounted() {
     if (this.products.length > 0) {
-      axios.defaults.headers.common["Authorization"] =
-          "Bearer " + this.accessToken;
       if (this.$store.getters.username != null) {
+        axios.defaults.headers.common["Authorization"] =
+            "Bearer " + this.accessToken;
         const url =
             "http://localhost:8080/api/user/getuser/?username=" +
             this.$store.getters.username;
@@ -163,21 +160,15 @@ export default {
             for (let i = 0; i < this.products.length; i++) {
               this.cartProducts.push({
                 ordersProductId: {
-                  order_id: this.products[i].order_id,
-                  product_id: this.products[i].id,
+                  ordersId: this.products[i].order_id,
+                  productId: this.products[i].id,
                 },
                 quantity: this.products[i].quantity,
               });
             }
             return axios.post(
                 "http://localhost:8080/api/ordersproduct/addordersproduct",
-                {
-                  ordersProductId: {
-                    ordersId: this.products[0].order_id,
-                    productId: this.products[0].id,
-                  },
-                  quantity: this.products[0].quantity,
-                }
+                this.cartProducts
             );
           })
           .then((response) => {
@@ -189,41 +180,41 @@ export default {
           .catch((error) => console.log(error));
       } else {
         let guestID = 9999;
-        axios.defaults.headers.common["Authorization"] =
-          "Bearer " + this.accessToken;
+        delete axios.defaults.headers.common["Authorization"];
         axios
-
-            .post("http://localhost:8080/api/orders/addorder", {
-              customer: {id: guestID},
-              adress: this.userAdress,
-              phoneNumber: this.userPhone,
-              customerComment: this.userComments,
-              firstName: this.firstName,
-              lastName: this.lastName,
+            .post(
+                "http://localhost:8080/api/orders/addorder",
+                {
+                  customer: {id: guestID},
+                  adress: this.userAdress,
+                  phoneNumber: this.userPhone,
+                  customerComment: this.userComments,
+                  firstName: this.firstName,
+                  lastName: this.lastName,
+                }
+            )
+            .then(() => {
+              return axios.get(
+                  "http://localhost:8080/api/orders/getlatestorder/?id=" + guestID
+              );
             })
-          .then((response) => {
-            console.log(response);
-            return axios.get(
-                "http://localhost:8080/api/orders/getlatestorder/?id=" + guestID
-            );
-          })
           .then((response) => {
             this.orderID = response.data.id;
             this.products.forEach((product) => {
-              product["order_id"] = response.data[0].id;
+              product["order_id"] = response.data.id;
             });
-            for (var i = 0; i < this.products.length; i++) {
+            for (let i = 0; i < this.products.length; i++) {
               this.cartProducts.push({
                 ordersProductId: {
-                  order_id: this.products[i].order_id,
-                  product_id: this.products[i].id,
+                  ordersId: this.products[i].order_id,
+                  productId: this.products[i].id,
                 },
                 quantity: this.products[i].quantity,
               });
             }
             return axios.post(
                 "http://localhost:8080/api/ordersproduct/addordersproduct",
-                {array: this.cartProducts}
+                this.cartProducts
             );
           })
           .then((response) => {

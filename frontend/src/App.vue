@@ -48,7 +48,8 @@
   <router-view />
 </template>
 <script>
-import { mapGetters } from "vuex";
+import {mapGetters} from "vuex";
+
 export default {
   data() {
     return {
@@ -78,14 +79,11 @@ body {
 #navlist {
   border-bottom: 1px solid #a80000;
   border-top: 1px solid #a80000;
-  margin: 0;
-  margin-bottom: 30px;
-  padding: 0;
+  margin: 0 0 30px;
   text-align: justify-all;
   background-color: #a80000;
   font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-  padding-bottom: 13px;
-  padding-top: 13px;
+  padding: 13px 0;
 }
 a:link,
 a:visited {

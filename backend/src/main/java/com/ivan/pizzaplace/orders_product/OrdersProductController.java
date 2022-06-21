@@ -1,11 +1,10 @@
 package com.ivan.pizzaplace.orders_product;
 
-import com.ivan.pizzaplace.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping(path = "api/ordersproduct")
@@ -26,8 +25,9 @@ public class OrdersProductController {
     public List<OrdersProduct> getUser(@RequestParam Long id) {
         return ordersProductService.getOrdersProduct(id);
     }
+
     @PostMapping(path = "/addordersproduct")
-    public void addOrdersProduct(@RequestBody OrdersProduct ordersProduct) {
+    public void addOrdersProduct(@RequestBody List<OrdersProduct> ordersProduct) {
         ordersProductService.insertNewOrdersProduct(ordersProduct);
     }
 

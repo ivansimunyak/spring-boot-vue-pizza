@@ -1,9 +1,6 @@
 package com.ivan.pizzaplace.orders;
 
 
-import com.ivan.pizzaplace.orders_product.OrdersProduct;
-import com.ivan.pizzaplace.user.User;
-import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -71,4 +68,5 @@ public class OrdersService {
             return optionalOrders;
         } else throw new IllegalStateException("Order does not exist or id is not provided!");
     }
+
 }
