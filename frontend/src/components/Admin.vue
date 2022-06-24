@@ -126,6 +126,7 @@
 </template>
 <script>
 import axios from "axios";
+
 export default {
   data() {
     return {
@@ -169,7 +170,7 @@ export default {
       );
       axios
         .post(
-            "http://localhost:8080/api/user/updateuser",
+            "http://localhost:8080/api/user/updateusertype",
             {id: user.id, userType: {id: record.id, name: record.name}},
             {
               headers: {

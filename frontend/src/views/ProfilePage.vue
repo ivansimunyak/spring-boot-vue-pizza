@@ -1,4 +1,5 @@
 <template>
+
   <div id="wrapper">
     <base-dialog
       v-if="deleteUser"
@@ -39,66 +40,68 @@
           class="RegistrationPageForm"
           @submit.prevent="submitEdit"
         >
-          <b><label>Name:</label></b
-          ><br />
+          <b><label>First Name:</label></b
+          ><br/>
           <input
-            ref="name"
-            id="name"
-            type="text"
-            maxlength="25"
-            name="name"
-            placeholder="Name"
-            pattern="[A-z]+"
-            :value="localUser[0].user_name"
-            required
-          /><br />
+              ref="name"
+              id="name"
+              type="text"
+              maxlength="25"
+              name="name"
+              placeholder="Name"
+              pattern="[A-z]+"
+              :value="localUser.firstName"
+              required
+          /><br/>
+          <b><label>Last Name:</label></b
+          ><br/>
+          <input
+              ref="name"
+              id="name"
+              type="text"
+              maxlength="25"
+              name="name"
+              placeholder="Name"
+              pattern="[A-z]+"
+              :value="localUser.lastName"
+              required
+          /><br/>
           <b><label>Email:</label></b
-          ><br />
+          ><br/>
           <input
-            ref="email"
-            id="email"
-            type="email"
-            maxlength="49"
-            name="email"
-            placeholder="Email"
-            :value="localUser[0].email"
-            required
+              ref="email"
+              id="email"
+              type="email"
+              maxlength="49"
+              name="email"
+              placeholder="Email"
+              :value="localUser.email"
+              required
           /><br />
           <b><label>Adress: </label></b><br />
           <input
-            ref="adress"
-            id="adress"
-            type="text"
-            name="adress"
-            maxlength="25"
-            placeholder="Adress"
-            :value="localUser[0].adress"
-            required
+              ref="adress"
+              id="adress"
+              type="text"
+              name="adress"
+              maxlength="25"
+              placeholder="Adress"
+              :value="localUser.adress"
+              required
           /><br />
           <b><label>Phone Number:(+381) </label></b><br />
           <input
-            ref="phone"
-            id="phone"
-            type="number"
-            placeholder="Phone Number"
-            name="phone"
-            max="2147483645"
-            min="0"
-            :value="localUser[0].phone_number"
-            required
-          /><br />
-          <b><label>City: </label></b><br />
-          <select
-            ref="city_id"
-            required
-            name="location_name"
-            :value="localUser[0].city_id"
-          >
-            <option disabled value="">Choose a city...</option>
-            <option v-for="city in cities" :value="city.id" :key="city.id">
-              {{ city.name }}
-            </option></select
-          ><br /><br />
+              ref="phone"
+              id="phone"
+              type="number"
+              placeholder="Phone Number"
+              name="phone"
+              max="2147483645"
+              min="0"
+              :value="localUser.phoneNumber"
+              required
+          /><br/>
+          <br/><br/>
           <btn-styled type="submit">Submit</btn-styled>
         </form>
         <!-- below is edit password -->
@@ -126,18 +129,19 @@
     <!-- profile below -->
     <h1>Your Profile</h1>
     <div class="profile-list">
-      <ul v-for="(local, index) in localUser" :key="index">
-        <li>Username: {{ localUser[index].username }}</li>
-        <br />
-        <li>Name:{{ localUser[index].user_name }}</li>
-        <br />
-        <li>Email:{{ localUser[index].email }}</li>
-        <br />
-        <li>Adress:{{ localUser[index].adress }}</li>
-        <br />
-        <li>Phone Number: {{ localUser[index].phone_number }}</li>
-        <br />
-        <li>City: {{ localUser[index].city_name }}</li>
+      <ul>
+        <li>Username: {{ localUser.username }}</li>
+        <br/>
+        <li>First Name:{{ localUser.firstName }}</li>
+        <br/>
+        <li>Last Name:{{ localUser.lastName }}</li>
+        <br/>
+        <li>Email:{{ localUser.email }}</li>
+        <br/>
+        <li>Adress:{{ localUser.adress }}</li>
+        <br/>
+        <li>Phone Number: {{ localUser.phoneNumber }}</li>
+        <br/>
       </ul>
     </div>
     <!-- below is table with orders -->
@@ -174,22 +178,22 @@
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import {mapGetters} from "vuex";
 import BtnStyled from "../components/BtnStyled.vue";
 import axios from "axios";
+
 export default {
   components: {
     BtnStyled,
   },
   data() {
     return {
-      columns: ["id", "order_status", "adress", "phone_number", "name"],
+      columns: ["id", "status", "adress", "phoneNumber"],
       headers: [
         "Order ID",
         "Order Status",
         "Adress",
         "Phone",
-        "Employee",
         "Check Details",
       ],
       oldPassword: "",
@@ -214,44 +218,34 @@ export default {
       return this.$store.getters.accessToken;
     },
     user() {
-      return this.$store.getters.user;
+      return this.$store.getters.username;
     },
-    ...mapGetters(["user"]),
+    ...mapGetters(["username"]),
   },
   mounted() {
     axios.defaults.headers.common["Authorization"] =
-      "Bearer " + this.accessToken;
-    const url = "http://localhost:3000/api/orders/profile/" + this.user.user_id;
+        "Bearer " + this.accessToken;
+
+    const url1 = "http://localhost:8080/api/user/getuser/?username=" + this.username;
     axios
-      .get(url, {
-        headers: {
-          Authorization: "Bearer " + this.accessToken,
-        },
-      })
-      .then((response) => {
-        this.profileOrders = response.data;
-      });
-    const url1 = "http://localhost:3000/api/user/oneuser/" + this.user.user_id;
+        .get(url1, {
+          headers: {
+            Authorization: "Bearer " + this.accessToken,
+          },
+        })
+        .then((response) => {
+          this.localUser = response.data;
+        });
+    const url = "http://localhost:8080/api/orders/getcustomerorders/?username=" + this.username
     axios
-      .get(url1, {
-        headers: {
-          Authorization: "Bearer " + this.accessToken,
-        },
-      })
-      .then((response) => {
-        response.status;
-        this.localUser = response.data;
-      });
-    const url2 = "http://localhost:3000/api/city/foruser";
-    axios
-      .get(url2, {
-        headers: {
-          Authorization: "Bearer " + this.accessToken,
-        },
-      })
-      .then((response) => {
-        this.cities = response.data;
-      });
+        .get(url, {
+          headers: {
+            Authorization: "Bearer " + this.accessToken,
+          },
+        })
+        .then((response) => {
+          this.profileOrders = response.data;
+        });
   },
   methods: {
     deleteProfile() {
@@ -263,7 +257,7 @@ export default {
     },
     makeChoice(choice) {
       this.choiceMade = true;
-      if (choice == "pw") {
+      if (choice === "pw") {
         this.editPassword = true;
       } else this.editData = true;
     },
@@ -293,7 +287,7 @@ export default {
         });
     },
     changePassword() {
-      if (this.oldPassword == this.newPassword)
+      if (this.oldPassword === this.newPassword)
         return alert("Old password is the same as new password!");
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + this.accessToken;
@@ -379,10 +373,8 @@ export default {
   position: absolute;
   width: 80%;
   height: 120%;
-  margin: 0px;
   top: 10%;
-  margin-left: 10%;
-  margin-right: 10%;
+  margin: 0px 10%;
   border-style: outset;
   border-color: #a80000;
 }
@@ -398,7 +390,6 @@ export default {
   padding: 5px;
   margin: 5px 0;
   border-radius: 15px;
-  box-shadow: 5px;
 }
 #back-btn {
   position: absolute;
@@ -416,7 +407,6 @@ li {
   margin-left: 15px;
 }
 .wrap-table {
-  border: 1px solid #999;
   border-radius: 1px;
   color: #333;
   background: white;
@@ -470,14 +460,12 @@ input {
   padding: 3px;
   margin: 3px 0;
   border-radius: 10px;
-  box-shadow: 5px;
   border-width: 1px;
 }
 select {
   padding: 3px;
   margin: 3px 0;
   border-radius: 10px;
-  box-shadow: 5px;
   border-width: 1px;
 }
 </style>

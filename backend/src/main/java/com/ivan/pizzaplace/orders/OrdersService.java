@@ -69,4 +69,13 @@ public class OrdersService {
         } else throw new IllegalStateException("Order does not exist or id is not provided!");
     }
 
+    public List<Orders> getCustomersOrders(String username) {
+        List<Orders> customerOrders = ordersRepository.findOrdersByCustomer(username);
+        if (!customerOrders.isEmpty()) {
+            return customerOrders;
+        } else {
+            throw new IllegalStateException("Customer not found!");
+        }
+    }
+
 }

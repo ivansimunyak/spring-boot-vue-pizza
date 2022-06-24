@@ -51,4 +51,9 @@ public class OrdersController {
     public Optional<Orders> getLatestOrder(@RequestParam Long id) {
         return ordersService.findLatestOrder(id);
     }
+
+    @GetMapping(path = "/getcustomerorders/")
+    public List<Orders> getCustomersOrders(@RequestParam(value = "username") String username) {
+        return ordersService.getCustomersOrders(username);
+    }
 }

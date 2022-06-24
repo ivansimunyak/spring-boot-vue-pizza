@@ -25,8 +25,8 @@ public class UserController {
         return userService.getUser(username);
     }
 
-    @PostMapping(path = "/updateuser")
-    public void updateUser(@RequestBody User user) {
+    @PostMapping(path = "/updateusertype")
+    public void updateUsersType(@RequestBody User user) {
         userService.updateUsersType(user);
     }
 

@@ -6,6 +6,7 @@
 </template>
 <script>
 import Admin from "../components/Admin.vue";
+
 export default {
   components: { Admin },
 };
@@ -16,8 +17,7 @@ export default {
   position: absolute;
   width: 80%;
   height: 175%;
-  margin: 10%;
-  margin-top: 0;
+  margin: 0 10% 10%;
   top: 10%;
   border-style: outset;
   border-color: #a80000;
