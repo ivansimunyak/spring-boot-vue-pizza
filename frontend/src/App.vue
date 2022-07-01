@@ -24,9 +24,6 @@
     <router-link v-if="isLoggedIn" to="/profile"
       ><font-awesome-icon :icon="['fas', 'user']" /> Profile</router-link
     >
-    <router-link v-if="isLoggedIn" to="/messageus"
-      ><font-awesome-icon :icon="['fas', 'message']" /> Message Us</router-link
-    >
     <router-link to="/cart"
       ><font-awesome-icon :icon="['fas', 'cart-shopping']" /> Cart ({{
         cartCount

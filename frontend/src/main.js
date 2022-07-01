@@ -1,32 +1,32 @@
-import { createApp } from "vue";
+import {createApp} from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import BaseDialog from "./components/UI/BaseDialog.vue";
 import BtnStyled from "./components/BtnStyled.vue";
-import { library } from "@fortawesome/fontawesome-svg-core";
+import {library} from "@fortawesome/fontawesome-svg-core";
 import {
-    faHome,
-    faList,
+    faArrowLeft,
+    faArrowLeftLong,
     faArrowRight,
-    faUser,
-    faInbox,
-    faUsers,
-    faPlusCircle,
-    faMinusCircle,
+    faArrowRightFromBracket,
+    faArrowRightToBracket,
     faBuilding,
-    faWallet,
+    faCartShopping,
+    faClipboardList,
+    faHome,
+    faInbox,
+    faList,
     faLocationArrow,
     faMessage,
-    faArrowRightToBracket,
-    faArrowRightFromBracket,
-    faClipboardList,
-    faCartShopping,
-    faArrowLeftLong,
+    faMinusCircle,
+    faPlusCircle,
+    faUser,
     faUserGear,
-    faArrowLeft,
+    faUsers,
+    faWallet,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import axios from "axios";
 
 const app = createApp(App);
@@ -66,23 +66,27 @@ axios.interceptors.response.use(
   },
   (err) => {
     const {
-      config,
-      response: { status },
+        config,
+        response: {status},
     } = err;
 
-    const originalRequest = config;
-    if (status === 403) {
-      store.commit("logout");
-      router.push({ name: "Login" });
-      return Promise.reject(false);
-    }
+      const originalRequest = config;
+      if (status === 403) {
+          store.commit("logout");
+          router.push({name: "Login"});
+          return Promise.reject(false);
+      }
+      if (status === 500) {
+          return Promise.reject(err.response.data.message)
+      }
 
-    if (originalRequest.url.includes("http://localhost:3000/api/user/login")) {
-      return Promise.reject(err);
-    }
-    if (status === 401) {
-      router.push({ name: "Home" });
-    }
+      if (originalRequest.url.includes("http://localhost:8080/login")) {
+          console.log("done")
+          return Promise.reject(err);
+      }
+      if (status === 401) {
+          router.push({name: "Home"});
+      }
   }
 );
 

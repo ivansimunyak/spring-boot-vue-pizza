@@ -16,6 +16,7 @@
 import axios from "axios";
 import BtnStyled from "../components/BtnStyled.vue";
 import UserTypes from "../components/UserTypes.vue";
+
 export default {
   components: { BtnStyled, UserTypes },
   data() {

@@ -15,6 +15,7 @@
 import BtnStyled from "../components/BtnStyled.vue";
 import Categories from "../components/Categories.vue";
 import axios from "axios";
+
 export default {
   components: {
     BtnStyled,

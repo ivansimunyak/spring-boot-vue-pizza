@@ -9,65 +9,73 @@
       >Back to profile</btn-styled
     >
     <div class="left-list">
-      <ul v-for="item in orderDetails" :key="item.id">
-        <li>Name: {{ item.name }}</li>
-        <br />
-        <li>Phone Number: {{ item.phone_number }}</li>
-        <br />
-        <li>Store: {{ locationName }}</li>
-        <br />
-        <li>Adress: {{ item.adress }}</li>
-        <br />
-        <li>Payment Method: {{ paymentMethodName }}</li>
+      <ul>
+        <li>Name: {{ orderDetails.firstName }}</li>
+        <br/>
+        <li>Phone Number: {{ orderDetails.phoneNumber }}</li>
+        <br/>
+        <li>Adress: {{ orderDetails.adress }}</li>
+        <br/>
+        <li>Email: {{ userEmail }}</li>
       </ul>
     </div>
     <div class="right-list">
-      <ul v-for="item in orderDetails" :key="item.id">
-        <li>Order Received: {{ this.format_date(this.whenMade) }}</li>
-        <br />
-        <li>Order Sent: {{ this.format_date(this.whenSent) }}</li>
-        <br />
-        <li>Order Status: {{ item.order_status }}</li>
-        <br />
-        <li>Employee:{{ employeeName }}</li>
-        <br />
-        <li>Comments: {{ item.comments }}</li>
+      <ul>
+        <li>Order Received: {{ this.format_date(orderDetails.orderDate) }}</li>
+        <br/>
+        <li>Order Sent: {{ this.format_date(orderDetails.orderDate) }}</li>
+        <br/>
+        <li>Order Status: {{ orderDetails.status }}</li>
+        <br/>
+        <li>Comments: {{ orderDetails.customerComment }}</li>
       </ul>
     </div>
 
-    <table-orders
-      id="table"
-      :columns="this.columns"
-      :headers="this.headers"
-      :items="orderProducts"
-      :columnsX="this.columnsX"
-    ></table-orders>
+    <section class="orders-table">
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Size</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Subtotal</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="(orderProduct, index) in orderProducts" :key="index">
+          <td>
+            {{ orderProduct.product.name }}
+          </td>
+          <td>
+            {{ orderProduct.product.size }}
+          </td>
+          <td>
+            {{ orderProduct.quantity }}
+          </td>
+          <td>
+            {{ orderProduct.product.price }}
+          </td>
+          <td>{{ orderProduct.quantity * orderProduct.product.price }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </section>
   </div>
 </template>
 <script>
-import TableOrders from "./TableOrders.vue";
 import axios from "axios";
 import BtnStyled from "./BtnStyled.vue";
 import moment from "moment";
+
 export default {
-  components: { TableOrders, BtnStyled },
+  components: {BtnStyled},
   data() {
     return {
-      columns: ["name", "size", "quantity", "price"],
-      headers: ["Product Name", "Product Size", "Quantity", "Price"],
-      columnsX: ["quantity", "price"],
       orderProducts: [],
       orderDetails: [],
-      sum: 0,
-      paymentMethodID: "",
-      paymentMethodName: "",
-      locationID: "",
-      locationName: "",
-      employeeID: "",
-      employeeName: "",
-      whenMade: 0,
-      whenSent: "",
-      orderID: 0,
+      orderDate: 0,
+      userEmail: null,
     };
   },
   computed: {
@@ -84,64 +92,19 @@ export default {
   },
   mounted() {
     this.orderID = this.$route.params.id;
-    const url1 = "http://localhost:3000/api/orders/details/" + this.orderID;
+    const url = "http://localhost:8080/api/orders/getorder/?id=" + this.orderID;
     axios
-      .get(url1, {
-        headers: {
-          Authorization: "Bearer " + this.accessToken,
-        },
-      })
+        .get(url, {
+          headers: {
+            Authorization: "Bearer " + this.accessToken,
+          },
+        })
       .then((response) => {
         this.orderDetails = response.data;
-        this.paymentMethodID = response.data[0].payment_method_id;
-        this.locationID = response.data[0].location_id;
-        this.employeeID = response.data[0].employee_id;
-        this.whenMade = new Date(response.data[0].when_made);
-        this.adress = response.data[0].adress;
-        this.name = response.data[0].name;
-        this.phone_number = response.data[0].phone_number;
-        this.orderStatus = response.data[0].order_status;
-        this.whenSent = new Date(response.data[0].when_sent);
-        const url5 =
-          "http://localhost:3000/api/user/oneuser/" + this.employeeID;
-        axios.get(url5).then((response) => {
-          this.employeeName = response.data[0].user_name;
-        });
-      });
-    const url4 =
-      "http://localhost:3000/api/location/foruser/" + this.locationID;
-    axios
-      .get(url4, {
-        headers: {
-          Authorization: "Bearer " + this.accessToken,
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-        this.locationName = response.data[0].locationName;
+        this.orderProducts = response.data.ordersProducts;
+        this.userEmail = response.data.customer.email;
       });
 
-    const url3 =
-      "http://localhost:3000/api/paymentMethod/forall/" + this.paymentMethodID;
-    axios
-      .get(url3, {
-        headers: {
-          Authorization: "Bearer " + this.accessToken,
-        },
-      })
-      .then((response) => {
-        this.paymentMethodName = response.data[0].name;
-      });
-    const url = "http://localhost:3000/api/orders/" + this.orderID;
-    axios
-      .get(url, {
-        headers: {
-          Authorization: "Bearer " + this.accessToken,
-        },
-      })
-      .then((response) => {
-        this.orderProducts = response.data;
-      });
   },
 };
 </script>
@@ -156,26 +119,14 @@ export default {
   top: 1%;
   background-color: rgb(255, 255, 255);
 }
+
 .btnBack {
   position: absolute;
   left: 6%;
   top: 25%;
   width: 20%;
 }
-.btnEdit {
-  position: absolute;
-  left: 55%;
-  top: 5%;
-  width: 30%;
-  height: 7.5%;
-}
-.btnDelete {
-  position: absolute;
-  left: 55%;
-  top: 15%;
-  width: 30%;
-  height: 7.5%;
-}
+
 #wrapper {
   background-color: rgba(255, 255, 255, 0.85);
   position: absolute;
@@ -184,27 +135,17 @@ export default {
   top: 10%;
   left: 3.25%;
   border-style: outset;
-  /* filter: blur(1px); */
 }
-.wrap-table {
-  position: absolute;
-  top: 65%;
-  left: -1%;
-}
+
 ul {
   font-weight: 300;
 }
-#table {
-  width: 76%;
-  border-style: outset;
-  /* border-top-style:    ; */
-  border-color: #a80000;
-}
+
 .left-list {
   height: 18%;
   width: 40%;
   top: 35%;
-  left: 5%;
+  left: 10%;
   position: absolute;
   border-style: ridge;
   border-color: #a80000;
@@ -213,7 +154,6 @@ ul {
   padding: 5px;
   margin: 5px 0;
   border-radius: 15px;
-  box-shadow: 5px;
 }
 
 .left-list ul {
@@ -224,25 +164,64 @@ ul {
 }
 .right-list {
   top: 35%;
-  right: 5%;
+  right: 11%;
   position: absolute;
   background-color: white;
-  height: 18%;
-  width: 40%;
+  width: 35%;
   border-style: ridge;
   border-color: #a80000;
+  height: 18%;
   padding: 5px;
   margin: 5px 0;
   border-radius: 15px;
-  box-shadow: 5px;
 }
+
 .right-list ul {
   margin-top: 1%;
   list-style-type: none;
-  text-align: center;
   font-size: 25px;
+  text-align: center;
 }
+
 li {
   border-bottom: 1px solid #a80000;
+}
+
+.orders-table {
+  border: 1px solid #999;
+  border-radius: 1px;
+  color: #333;
+  background: white;
+  overflow: auto;
+  height: 250px;
+  width: 40%;
+  position: relative;
+  top: 60%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  background: #a80000;
+  padding: 10px 5px;
+  text-align: center;
+  border-bottom: 1px solid #a80000;
+  color: white;
+  z-index: 3;
+}
+
+td {
+  padding: 5px 5px;
+  text-align: center;
+  z-index: 1;
+  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial,
+  sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
 }
 </style>

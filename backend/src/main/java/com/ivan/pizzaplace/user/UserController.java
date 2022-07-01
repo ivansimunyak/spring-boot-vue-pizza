@@ -39,4 +39,19 @@ public class UserController {
     public void deleteUser(@RequestBody User user) {
         userService.deleteUser(user);
     }
+
+    @PostMapping(path = "/deleteprofile")
+    public void deleteProfile(@RequestBody User user) {
+        userService.deleteProfile(user);
+    }
+
+    @PostMapping(path = "/changepassword")
+    public void changePassword(@RequestBody User user) {
+        userService.changePassword(user);
+    }
+
+    @PostMapping(path = "/updateprofile")
+    public void updateProfile(@RequestBody User user) {
+        userService.updateProfile(user);
+    }
 }

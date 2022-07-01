@@ -182,17 +182,14 @@ export default {
         let guestID = 9999;
         delete axios.defaults.headers.common["Authorization"];
         axios
-            .post(
-                "http://localhost:8080/api/orders/addorder",
-                {
-                  customer: {id: guestID},
-                  adress: this.userAdress,
-                  phoneNumber: this.userPhone,
-                  customerComment: this.userComments,
-                  firstName: this.firstName,
-                  lastName: this.lastName,
-                }
-            )
+            .post("http://localhost:8080/api/orders/addorder", {
+              customer: {id: guestID},
+              adress: this.userAdress,
+              phoneNumber: this.userPhone,
+              customerComment: this.userComments,
+              firstName: this.firstName,
+              lastName: this.lastName,
+            })
             .then(() => {
               return axios.get(
                   "http://localhost:8080/api/orders/getlatestorder/?id=" + guestID

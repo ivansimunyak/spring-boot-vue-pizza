@@ -16,7 +16,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
-    @JsonIgnore
+
     private String password;
     private String email;
     private String adress;
@@ -27,12 +27,12 @@ public class User {
     @JoinColumn(name = "user_type_id")
     private UserType userType;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "id")
     @JsonIgnore
     private List<Review> reviews;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "id")
     @JsonIgnore
     private List<Orders> orders;

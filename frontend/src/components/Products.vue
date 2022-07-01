@@ -105,6 +105,7 @@
 <script>
 import axios from "axios";
 import BtnStyled from "../components/BtnStyled.vue";
+
 export default {
   components: { BtnStyled },
   data() {

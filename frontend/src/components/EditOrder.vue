@@ -34,14 +34,14 @@
         <label for="phone">Phone:</label><br/>
         <input
             type="number"
-          required
-          name="phone_number"
-          v-model="userData.phoneNumber"
-        /><br />
-        <label for="orderState">Order status:</label><br />
+            required
+            name="phone_number"
+            v-model="userData.phoneNumber"
+        /><br/>
+        <label for="orderState">Order status:</label><br/>
         <select
-          id="selectForm"
-          required
+            id="selectForm"
+            required
           name="order_status"
           v-model="userData.status"
         >
@@ -57,6 +57,7 @@
 <script>
 import axios from "axios";
 import BtnStyled from "./BtnStyled.vue";
+
 export default {
   components: {
     BtnStyled,

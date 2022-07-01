@@ -76,7 +76,7 @@
           <td>
             {{ orderProduct.product.price }}
           </td>
-          <td>{{ 5 }}</td>
+          <td>{{ orderProduct.quantity * orderProduct.product.price }}</td>
         </tr>
         </tbody>
       </table>
@@ -88,6 +88,7 @@
 import axios from "axios";
 import BtnStyled from "./BtnStyled.vue";
 import moment from "moment";
+
 export default {
   props: { orderID: Number },
   components: { BtnStyled },

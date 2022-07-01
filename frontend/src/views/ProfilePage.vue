@@ -1,6 +1,6 @@
 <template>
-
   <div id="wrapper">
+    <h3>{{ localUser.id }}</h3>
     <base-dialog
       v-if="deleteUser"
       title="Delete Your Profile"
@@ -8,6 +8,7 @@
     >
       <template #default>
         <!-- delete profile below -->
+        <h1>{{ errorMessage }}</h1>
         <form @submit.prevent="submitDelete">
           <label id="enter-password" for="password"
             >Please enter your password</label
@@ -36,14 +37,14 @@
         >
         <!-- Below is edit form -->
         <form
-          v-if="editData"
-          class="RegistrationPageForm"
-          @submit.prevent="submitEdit"
+            v-if="editData"
+            class="RegistrationPageForm"
+            @submit.prevent="submitEdit"
         >
           <b><label>First Name:</label></b
           ><br/>
           <input
-              ref="name"
+              ref="first-name"
               id="name"
               type="text"
               maxlength="25"
@@ -56,7 +57,7 @@
           <b><label>Last Name:</label></b
           ><br/>
           <input
-              ref="name"
+              ref="last-name"
               id="name"
               type="text"
               maxlength="25"
@@ -77,7 +78,7 @@
               placeholder="Email"
               :value="localUser.email"
               required
-          /><br />
+          /><br/>
           <b><label>Adress: </label></b><br />
           <input
               ref="adress"
@@ -88,8 +89,8 @@
               placeholder="Adress"
               :value="localUser.adress"
               required
-          /><br />
-          <b><label>Phone Number:(+381) </label></b><br />
+          /><br/>
+          <b><label>Phone Number:(+381) </label></b><br/>
           <input
               ref="phone"
               id="phone"
@@ -189,13 +190,7 @@ export default {
   data() {
     return {
       columns: ["id", "status", "adress", "phoneNumber"],
-      headers: [
-        "Order ID",
-        "Order Status",
-        "Adress",
-        "Phone",
-        "Check Details",
-      ],
+      headers: ["Order ID", "Order Status", "Adress", "Phone", "Check Details"],
       oldPassword: "",
       newPassword: "",
       profileOrders: [],
@@ -226,7 +221,8 @@ export default {
     axios.defaults.headers.common["Authorization"] =
         "Bearer " + this.accessToken;
 
-    const url1 = "http://localhost:8080/api/user/getuser/?username=" + this.username;
+    const url1 =
+        "http://localhost:8080/api/user/getuser/?username=" + this.username;
     axios
         .get(url1, {
           headers: {
@@ -236,7 +232,9 @@ export default {
         .then((response) => {
           this.localUser = response.data;
         });
-    const url = "http://localhost:8080/api/orders/getcustomerorders/?username=" + this.username
+    const url =
+        "http://localhost:8080/api/orders/getcustomerorders/?username=" +
+        this.username;
     axios
         .get(url, {
           headers: {
@@ -270,20 +268,18 @@ export default {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + this.accessToken;
       axios
-        .post("http://localhost:3000/api/user/deleteprofile", {
-          id: this.user.user_id,
-          password: this.password,
-        })
-        .then((res) => {
-          //Perform Success Action
-          console.log(res.data);
+          .post("http://localhost:8080/api/user/deleteprofile", {
 
-          this.$router.push("/logout");
-        })
+            id: this.localUser.id,
+            password: this.password,
+          })
+          .then(() => {
+            this.$router.push("/logout");
+          })
         .catch((error) => {
           // error.response.status Check status code
           //  console.log( error.response.status)
-          console.log(error);
+          this.errorMessage = error;
         });
     },
     changePassword() {
@@ -292,17 +288,15 @@ export default {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + this.accessToken;
       axios
-        .post("http://localhost:3000/api/user/changepassword", {
-          id: this.user.user_id,
-          password: this.oldPassword,
-          newPassword: this.newPassword,
-        })
-        .then((res) => {
-          //Perform Success Action
-          console.log(res.data);
-          this.closeDialog();
-          alert("Password changed successfully! ");
-        })
+          .post("http://localhost:8080/api/user/changepassword", {
+            id: this.localUser.id,
+            password: this.newPassword,
+          })
+          .then(() => {
+            //Perform Success Action
+            this.closeDialog();
+            alert("Password changed successfully! ");
+          })
         .catch((error) => {
           // error.response.status Check status code
           console.log(error.response.status);
@@ -313,39 +307,30 @@ export default {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + this.accessToken;
       axios
-        .post("http://localhost:3000/api/user/editprofile", {
-          email: this.$refs.email.value,
-          adress: this.$refs.adress.value,
-          name: this.$refs.name.value,
-          phone_number: this.$refs.phone.value,
-          city_id: this.$refs.city_id.value,
-          id: this.user.user_id,
-        })
+          .post("http://localhost:8080/api/user/updateprofile", {
+            email: this.$refs.email.value,
+            adress: this.$refs.adress.value,
+            firstName: this.$refs["first-name"].value,
+            lastName: this.$refs["last-name"].value,
+            phoneNumber: this.$refs.phone.value,
+            id: this.localUser.id,
+          })
         .then((res) => {
           //Perform Success Action
-          console.log(res.data.msg);
-          if (res.data.msg == "Edited profile successfully!") {
-            const searchObject = this.cities.find(
-              (city) => city.id == this.$refs.city_id.value
-            );
-            this.localUser.splice(0, 1, {
-              username: this.user.username,
-              email: this.$refs.email.value,
-              adress: this.$refs.adress.value,
-              user_name: this.$refs.name.value,
-              phone_number: this.$refs.phone.value,
-              city_id: this.$refs.city_id.value,
-              city_name: searchObject.name,
-            });
+          if (res.status === 200) {
+            this.localUser.username = this.username;
+            this.localUser.email = this.$refs.email.value;
+            this.localUser.adress = this.$refs.adress.value;
+            this.localUser.firstName = this.$refs["first-name"].value;
+            this.localUser.lastName = this.$refs["last-name"].value;
+            this.localUser.phoneNumber = this.$refs.phone.value;
+
             this.closeDialog();
-          } else if (res.data.msg == "Username or email taken!") {
-            this.errorMessage = res.data.msg;
           }
+
         })
         .catch((error) => {
-          // error.response.status Check status code
-          //  console.log( error.response.status)
-          console.log(error);
+          this.errorMessage = error;
         });
     },
     closeDialog() {

@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import {createRouter, createWebHashHistory} from "vue-router";
 import OrderPage from "../views/OrderPage.vue";
 import CheckDetails from "../views/CheckDetails.vue";
 import EditOneOrder from "../views/EditOneOrder.vue";
@@ -32,9 +32,9 @@ const routes = [
     component: CheckDetails,
   },
   {
-      path: "/about",
-      name: "About",
-      component: () => import("../views/About.vue"),
+    path: "/about",
+    name: "About",
+    component: () => import("../views/About.vue"),
   },
   {
     path: "/editorder/:id",
