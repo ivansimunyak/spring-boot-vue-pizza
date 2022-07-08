@@ -41,7 +41,7 @@
     <table>
       <thead>
         <tr>
-          <!--          <th>Image</th>-->
+          <th>Image</th>
           <th>Name</th>
           <th>Size</th>
           <th>Category</th>
@@ -50,23 +50,20 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(product, index) in products" :key="index">
-          <!--          <td v-if="product.productCategory.name === selectedCategory">-->
-          <!--            <img-->
-          <!--              id="product-image"-->
-          <!--              :src="require(`../assets/${product.picture}`)"-->
-          <!--            />-->
-          <!--          </td>-->
-          <td v-if="product.productCategory.name === selectedCategory">
-            {{ product.name }}
-          </td>
-          <td v-if="product.productCategory.name === selectedCategory">
-            {{ product.size }}
-          </td>
-          <td v-if="product.productCategory.name === selectedCategory">
-            {{ product.productCategory.name }}
-          </td>
-          <td v-if="product.productCategory.name === selectedCategory">
+      <tr v-for="(product, index) in products" :key="index">
+        <td v-if="product.productCategory.name === selectedCategory">
+          <img id="product-image" :src="product.imageUrl"/>
+        </td>
+        <td v-if="product.productCategory.name === selectedCategory">
+          {{ product.name }}
+        </td>
+        <td v-if="product.productCategory.name === selectedCategory">
+          {{ product.size }}
+        </td>
+        <td v-if="product.productCategory.name === selectedCategory">
+          {{ product.productCategory.name }}
+        </td>
+        <td v-if="product.productCategory.name === selectedCategory">
             {{ product.price }}
           </td>
           <td v-if="product.productCategory.name === selectedCategory">
@@ -81,7 +78,7 @@
 </template>
 <script>
 import axios from "axios";
-import { mapMutations } from "vuex";
+import {mapMutations} from "vuex";
 import BtnStyled from "./BtnStyled.vue";
 
 export default {

@@ -25,10 +25,7 @@
       <tbody>
         <tr v-for="(product, index) in products" :key="index">
           <td>
-            <!--            <img-->
-            <!--              id="product-image"-->
-            <!--              :src="require(`../assets/${product.picture}`)"-->
-            <!--            />-->
+            <img id="product-image" :src="product.imageUrl"/>
           </td>
           <td>{{ product.name }}</td>
           <td>{{ product.size }}</td>
@@ -64,7 +61,8 @@
   </section>
 </template>
 <script>
-import { mapMutations } from "vuex";
+import {mapMutations} from "vuex";
+
 export default {
   methods: {
     ...mapMutations(["removeCartItem", "decreaseQuantity", "increaseQuantity"]),

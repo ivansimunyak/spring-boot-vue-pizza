@@ -51,7 +51,6 @@ dialog {
 header {
   background-color: #a80000;
   color: white;
-  width: 100%;
   padding: 1rem;
 }
 

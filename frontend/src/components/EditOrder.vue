@@ -42,13 +42,14 @@
         <select
             id="selectForm"
             required
-          name="order_status"
-          v-model="userData.status"
+            name="order_status"
+            v-model="userData.status"
         >
           <option value="Delivered">Delivered</option>
           <option value="Canceled">Canceled</option>
-          <option value="Processing">Processing</option></select
-        ><br /><br />
+          <option value="Processing">Processing</option>
+        </select
+        ><br/><br/>
         <btn-styled type="submit">Submit</btn-styled>
       </form>
     </div>

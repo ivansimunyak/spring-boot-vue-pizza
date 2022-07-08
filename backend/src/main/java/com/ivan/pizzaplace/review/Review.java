@@ -13,23 +13,26 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "reviewer_id")
     private User reviewer;
-    private int rating;
+    private String rating;
     private String comment;
+    private int order_id;
 
     public Review() {
     }
 
-    public Review(User reviewer, int rating, String comment) {
+    public Review(User reviewer, String rating, String comment, int order_id) {
         this.reviewer = reviewer;
         this.rating = rating;
         this.comment = comment;
+        this.order_id = order_id;
     }
 
-    public Review(Long id, User reviewer, int rating, String comment) {
+    public Review(Long id, User reviewer, String rating, String comment, int order_id) {
         this.id = id;
         this.reviewer = reviewer;
         this.rating = rating;
         this.comment = comment;
+        this.order_id = order_id;
     }
 
     public Long getId() {
@@ -48,11 +51,11 @@ public class Review {
         this.reviewer = reviewer;
     }
 
-    public int getRating() {
+    public String getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(String rating) {
         this.rating = rating;
     }
 
@@ -64,13 +67,22 @@ public class Review {
         this.comment = comment;
     }
 
+    public int getOrder_id() {
+        return order_id;
+    }
+
+    public void setOrder_id(int order_id) {
+        this.order_id = order_id;
+    }
+
     @Override
     public String toString() {
         return "Review{" +
                 "id=" + id +
                 ", reviewer=" + reviewer +
-                ", rating=" + rating +
+                ", rating='" + rating + '\'' +
                 ", comment='" + comment + '\'' +
+                ", order_id=" + order_id +
                 '}';
     }
 }

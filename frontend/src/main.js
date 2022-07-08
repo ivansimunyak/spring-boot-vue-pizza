@@ -5,6 +5,7 @@ import store from "./store";
 import BaseDialog from "./components/UI/BaseDialog.vue";
 import BtnStyled from "./components/BtnStyled.vue";
 import {library} from "@fortawesome/fontawesome-svg-core";
+
 import {
     faArrowLeft,
     faArrowLeftLong,
@@ -28,6 +29,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import axios from "axios";
+import {initializeApp} from "firebase/app";
+import {getFirestore} from 'firebase/firestore/lite';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/storage';
 
 const app = createApp(App);
 library.add(
@@ -89,5 +94,27 @@ axios.interceptors.response.use(
       }
   }
 );
+const firebaseConfig = {
 
+    apiKey: "AIzaSyCtBbe5k-mUJLLGU1MmwsaHSgqR8cQPbJ8",
+
+    authDomain: "pizza-place-cd744.firebaseapp.com",
+
+    projectId: "pizza-place-cd744",
+
+    storageBucket: "pizza-place-cd744.appspot.com",
+
+    messagingSenderId: "699075204041",
+
+    appId: "1:699075204041:web:8dc9144d308417de448e18",
+
+    measurementId: "G-KTDXT03H1M"
+
+};
+
+firebase.initializeApp(firebaseConfig);
+const app1 = initializeApp(firebaseConfig);
+const db = getFirestore(app1);
+var storage = firebase.storage();
+export {storage, db};
 app.mount("#app");

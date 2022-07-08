@@ -64,10 +64,7 @@
       <tbody>
         <tr v-for="(product, index) in products" :key="index">
           <td>
-            <!--            <img-->
-            <!--              id="product-image"-->
-            <!--              :src="require(`../assets/${product.picture}`)"-->
-            <!--            />-->
+            <img id="product-image" :src="product.imageUrl"/>
           </td>
           <td>{{ product.name }}</td>
           <td>{{ product.size }}</td>

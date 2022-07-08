@@ -44,7 +44,7 @@ export default createStore({
         (state.cart = []);
     },
     addProduct: (state, product) => {
-      const record = state.cart.find((element) => element.id == product.id);
+      const record = state.cart.find((element) => element.id === product.id);
       if (record) {
         record.quantity++;
       } else {

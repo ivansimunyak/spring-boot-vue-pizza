@@ -79,7 +79,7 @@
               :value="localUser.email"
               required
           /><br/>
-          <b><label>Adress: </label></b><br />
+          <b><label>Adress: </label></b><br/>
           <input
               ref="adress"
               id="adress"
@@ -269,7 +269,6 @@ export default {
         "Bearer " + this.accessToken;
       axios
           .post("http://localhost:8080/api/user/deleteprofile", {
-
             id: this.localUser.id,
             password: this.password,
           })
@@ -327,7 +326,6 @@ export default {
 
             this.closeDialog();
           }
-
         })
         .catch((error) => {
           this.errorMessage = error;

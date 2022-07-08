@@ -10,6 +10,7 @@ import java.util.List;
 @RequestMapping(path = "api/product")
 public class ProductController {
 
+
     private final ProductService productService;
 
     @Autowired
@@ -36,4 +37,5 @@ public class ProductController {
     public void deleteProduct(@RequestBody Product product) {
         productService.deleteProduct(product);
     }
+
 }

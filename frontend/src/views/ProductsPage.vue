@@ -21,18 +21,20 @@
         <select required v-model="addingCategoryID">
           <option disabled value="">Select a category...</option>
           <option
-            v-for="category in categories"
-            :key="category.id"
-            :value="category.id"
+              v-for="category in categories"
+              :key="category.id"
+              :value="category.id"
           >
             {{ category.name }}
           </option>
         </select>
-        <br /><br />
-        <!--        <label for="image">Image:</label><br />-->
-        <!--        <input required type="file" name="image" @change="handleFileUpload" />-->
-        <!--        <br />-->
-        <btn-styled type="submit">Submit</btn-styled>
+        <br/><br/>
+        <label for="image">Image:</label><br/>
+        <input type="file" @change="handleUpload($event)"/>
+        <br/>
+        <btn-styled @click.prevent="submitData()" class="btn btn-primary"
+        >Añadir
+        </btn-styled>
       </form>
     </div>
   </div>
@@ -41,6 +43,8 @@
 import BtnStyled from "../components/BtnStyled.vue";
 import Products from "../components/Products.vue";
 import axios from "axios";
+import {storage} from "../main";
+import "firebase/storage";
 
 export default {
   components: {
@@ -54,8 +58,10 @@ export default {
       addingPrice: "",
       addingSize: "",
       addingCategoryID: "",
-      addingImage: null,
+      file: null,
+      imageData: null,
       categories: [],
+      addingCategoryName: "",
     };
   },
   computed: {
@@ -64,35 +70,66 @@ export default {
     },
   },
   methods: {
-    submitForm() {
-      const fd = new FormData();
-      const addingCategory = {id: this.addingCategoryID};
-      fd.append("name", this.addingName);
-      fd.append("size", this.addingSize);
-      fd.append("price", this.addingPrice);
-      Object.entries(addingCategory).forEach(([key, value]) => {
-        fd.append(key, value);
-      });
-      // fd.append("productImage", this.addingImage);
-      axios
-          .post("http://localhost:8080/api/product/addproduct", fd, {
-            headers: {
-              Authorization: "Bearer " + this.accessToken,
-            },
-          })
-          .then(() => {
-            //Perform Success Action
-            this.uniqueProductKey++;
-            this.$store.commit("increment");
-            alert("Product added!");
-          })
-        .catch((error) => {
-          // error.response.status Check status code
-          console.log(error.response.status);
-        });
+    handleUpload(event) {
+      console.log(event.target.files[0]);
+      const tipoArchivo = event.target.files[0].type;
+      if (tipoArchivo === "image/jpeg" || tipoArchivo === "image/png") {
+        this.file = event.target.files[0];
+        this.error = null;
+      } else {
+        this.error = "Archivo no válido";
+        this.file = null;
+        return;
+      }
+      const reader = new FileReader();
+      reader.readAsDataURL(this.file);
+      reader.onload = (e) => {
+        this.imageData = e.target.result;
+        // console.log(e.target.result)
+      };
     },
-    handleFileUpload(event) {
-      this.addingImage = event.target.files[0];
+    async submitData() {
+      try {
+        const refImage = storage
+            .ref()
+            .child("images")
+            .child(this.file.name + Date.now());
+        const res = await refImage.put(this.file);
+        console.log(res);
+        const urlImage = await refImage.getDownloadURL();
+        console.log(urlImage);
+        const record = this.categories.find(
+            (element) => element.id === this.addingCategoryID
+        );
+        axios
+            .post(
+                "http://localhost:8080/api/product/addproduct",
+                {
+                  name: this.addingName,
+                  size: this.addingSize,
+                  price: this.addingPrice,
+                  productCategory: {id: this.addingCategoryID, name: record.name},
+                  imageUrl: urlImage,
+                },
+                {
+                  headers: {
+                    Authorization: "Bearer " + this.accessToken,
+                  },
+                }
+            )
+            .then(() => {
+              //Perform Success Action
+              this.uniqueProductKey++;
+              this.$store.commit("increment");
+              alert("Product added!");
+            })
+            .catch((error) => {
+              // error.response.status Check status code
+              console.log(error.response.status);
+            });
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
   mounted() {

@@ -4,9 +4,40 @@
       <h1>Order Details</h1>
       <h2>Order ID {{ this.$route.params.id }}</h2>
     </div>
-
+    <btn-styled
+        v-if="
+        orderDetails.status === 'Delivered' ||
+        orderDetails.status === 'Canceled'
+      "
+        id="btnReview"
+        @click="leaveReview = true"
+    >Leave Review
+    </btn-styled
+    >
+    <base-dialog v-if="leaveReview" title="Review" @close="closeDialog">
+      <template #default>
+        <!-- leave review below -->
+        <h1>{{ errorMessage }}</h1>
+        <form @submit.prevent="submitReview">
+          <label id="rating">Select rating:</label><br/><br/>
+          <select id="rating" v-model="userRating">
+            <option>Excellent</option>
+            <option>Very Good</option>
+            <option>Okay</option>
+            <option>Decent</option>
+            <option>Bad</option>
+          </select
+          ><br/><br/>
+          <label>Your comment:</label><br/><br/>
+          <textarea v-model="userComment" maxlength="499"></textarea>
+          <br/>
+          <btn-styled type="submit">Submit</btn-styled>
+        </form>
+      </template>
+    </base-dialog>
     <btn-styled class="btnBack" @click="$router.push({ path: `/profile` })"
-      >Back to profile</btn-styled
+    >Back to profile
+    </btn-styled
     >
     <div class="left-list">
       <ul>
@@ -76,6 +107,10 @@ export default {
       orderDetails: [],
       orderDate: 0,
       userEmail: null,
+      leaveReview: false,
+      errorMessage: "",
+      userRating: "Okay",
+      userComment: "",
     };
   },
   computed: {
@@ -88,6 +123,34 @@ export default {
       if (value) {
         return moment(String(value)).format("MMMM Do YYYY, h:mm:ss a");
       }
+    },
+    closeDialog() {
+      this.leaveReview = false;
+    },
+    submitReview() {
+      axios
+          .post(
+              "http://localhost:8080/api/reviews/addreview",
+              {
+                rating: this.userRating,
+                comment: this.userComment,
+                reviewer: {id: this.orderDetails.customer.id},
+                order_id: this.$route.params.id
+              },
+              {
+                headers: {
+                  Authorization: "Bearer " + this.accessToken,
+                },
+              }
+          )
+          .then(() => {
+            //Perform Success Action
+            this.closeDialog();
+            alert("Review left successfully!");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
     },
   },
   mounted() {
@@ -104,7 +167,6 @@ export default {
         this.orderProducts = response.data.ordersProducts;
         this.userEmail = response.data.customer.email;
       });
-
   },
 };
 </script>
@@ -135,6 +197,14 @@ export default {
   top: 10%;
   left: 3.25%;
   border-style: outset;
+}
+
+#btnReview {
+  position: absolute;
+  top: 5.5%;
+  right: 10%;
+  width: 15%;
+  height: 5%;
 }
 
 ul {
@@ -223,5 +293,23 @@ td {
   z-index: 1;
   font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial,
   sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+select {
+  padding: 3px;
+  margin: 3px 0;
+  border-radius: 10px;
+  border-width: 1px;
+}
+
+textarea {
+  position: relative;
+  resize: none;
+  padding: 5px;
+  width: 50%;
+  height: 125px;
+  margin: 5px 0;
+  border-radius: 10px;
+  border-width: 1px;
 }
 </style>
