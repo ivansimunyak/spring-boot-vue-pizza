@@ -1,6 +1,5 @@
 <template>
   <h1>{{ statusMsg }}</h1>
-  <p>{{ orders[0] }}</p>
   <p class="error" v-if="error">{{ error }}</p>
   <table class="table">
     <thead>
@@ -46,6 +45,7 @@
 <script>
 import BtnStyled from "./BtnStyled.vue";
 import axios from "axios";
+
 export default {
   components: { BtnStyled },
   name: "Orders",

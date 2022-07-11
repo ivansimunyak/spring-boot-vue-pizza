@@ -34,7 +34,7 @@
 }
 
 .button-3:hover {
-  background-color: #bd5555;
+  background-color: #ca0000;
 }
 
 .button-3:focus {

@@ -25,9 +25,9 @@ public class ReviewController {
         reviewService.insertNewReview(review);
     }
 
-    @DeleteMapping(path = "/deletereview")
-    public void deleteReview(@RequestBody Review review) {
-        reviewService.removeReview(review);
+    @PostMapping(path = "/deletereview")
+    public void deleteReview(@RequestParam Long id) {
+        reviewService.removeReview(id);
     }
 
 

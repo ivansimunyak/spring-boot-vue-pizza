@@ -11,9 +11,8 @@
       "
         id="btnReview"
         @click="leaveReview = true"
-    >Leave Review
-    </btn-styled
-    >
+    >Leave a review
+    </btn-styled>
     <base-dialog v-if="leaveReview" title="Review" @close="closeDialog">
       <template #default>
         <!-- leave review below -->
@@ -37,8 +36,7 @@
     </base-dialog>
     <btn-styled class="btnBack" @click="$router.push({ path: `/profile` })"
     >Back to profile
-    </btn-styled
-    >
+    </btn-styled>
     <div class="left-list">
       <ul>
         <li>Name: {{ orderDetails.firstName }}</li>
@@ -135,7 +133,7 @@ export default {
                 rating: this.userRating,
                 comment: this.userComment,
                 reviewer: {id: this.orderDetails.customer.id},
-                order_id: this.$route.params.id
+                order_id: this.$route.params.id,
               },
               {
                 headers: {
@@ -200,11 +198,11 @@ export default {
 }
 
 #btnReview {
-  position: absolute;
-  top: 5.5%;
-  right: 10%;
-  width: 15%;
-  height: 5%;
+  position: relative;
+  width: 25%;
+  height: 8%;
+  top: 5%;
+  left: 10%;
 }
 
 ul {

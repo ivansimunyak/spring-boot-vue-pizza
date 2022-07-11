@@ -15,19 +15,19 @@ public class Review {
     private User reviewer;
     private String rating;
     private String comment;
-    private int order_id;
+    private Long order_id;
 
     public Review() {
     }
 
-    public Review(User reviewer, String rating, String comment, int order_id) {
+    public Review(User reviewer, String rating, String comment, Long order_id) {
         this.reviewer = reviewer;
         this.rating = rating;
         this.comment = comment;
         this.order_id = order_id;
     }
 
-    public Review(Long id, User reviewer, String rating, String comment, int order_id) {
+    public Review(Long id, User reviewer, String rating, String comment, Long order_id) {
         this.id = id;
         this.reviewer = reviewer;
         this.rating = rating;
@@ -67,11 +67,11 @@ public class Review {
         this.comment = comment;
     }
 
-    public int getOrder_id() {
+    public Long getOrder_id() {
         return order_id;
     }
 
-    public void setOrder_id(int order_id) {
+    public void setOrder_id(Long order_id) {
         this.order_id = order_id;
     }
 

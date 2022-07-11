@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ReviewService {
@@ -23,9 +22,9 @@ public class ReviewService {
         reviewRepository.save(review);
     }
 
-    public void removeReview(Review review) {
-        Optional<Review> reviewOptional = reviewRepository.findReviewById(review.getId());
-        if (reviewOptional.isPresent()) {
+    public void removeReview(Long id) {
+        Review review = reviewRepository.findReviewById(id);
+        if (review != null) {
             reviewRepository.delete(review);
         } else throw new IllegalStateException("Review does not exist or id is not provided!");
     }

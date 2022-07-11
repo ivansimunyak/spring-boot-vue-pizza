@@ -1,19 +1,40 @@
 <template>
   <div id="navlist">
     <router-link v-if="isAdmin" to="/admin"
-      ><font-awesome-icon :icon="['fas', 'user-gear']" /> Admin</router-link
+    >
+      <font-awesome-icon :icon="['fas', 'user-gear']"/>
+      Admin
+    </router-link
     >
     <router-link v-if="isAdmin || isEmployee" to="/orders"
-      ><font-awesome-icon :icon="['fas', 'list']" /> Orders</router-link
+    >
+      <font-awesome-icon :icon="['fas', 'list']"/>
+      Orders
+    </router-link
+    >
+    <router-link v-if="isAdmin" to="/reviews"
+    >
+      <font-awesome-icon :icon="['fas', 'user-gear']"/>
+      Reviews
+    </router-link
     >
     <router-link v-if="isAdmin" to="/products"
-      ><font-awesome-icon :icon="['fas', 'list']" /> Products</router-link
+    >
+      <font-awesome-icon :icon="['fas', 'list']"/>
+      Products
+    </router-link
     >
     <router-link v-if="isAdmin" to="/categories"
-      ><font-awesome-icon :icon="['fas', 'list']" /> Categories</router-link
+    >
+      <font-awesome-icon :icon="['fas', 'list']"/>
+      Categories
+    </router-link
     >
     <router-link v-if="isAdmin" to="/usertypes"
-      ><font-awesome-icon :icon="['fas', 'users']" /> User Types</router-link
+    >
+      <font-awesome-icon :icon="['fas', 'users']"/>
+      User Types
+    </router-link
     >
     <router-link to="/"
       ><font-awesome-icon :icon="['fas', 'house']" /> Home</router-link

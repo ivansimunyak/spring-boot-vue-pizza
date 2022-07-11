@@ -348,9 +348,6 @@ export default {
 *:after {
   box-sizing: border-box;
 }
-.editBtn {
-  width: 30%;
-}
 #wrapper {
   background-color: #ffffffd9;
   position: absolute;

@@ -53,7 +53,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/user/getuser/",
                         "/api/usertype",
                         "/api/reviews/deletereview").hasRole("Admin").
-
                 antMatchers("/error").permitAll()
                 .antMatchers("/error/**").permitAll().
                 anyRequest().authenticated().and().
