@@ -33,7 +33,7 @@
         <input type="file" @change="handleUpload($event)"/>
         <br/>
         <btn-styled @click.prevent="submitData()" class="btn btn-primary"
-        >Añadir
+        >Add
         </btn-styled>
       </form>
     </div>
@@ -77,7 +77,7 @@ export default {
         this.file = event.target.files[0];
         this.error = null;
       } else {
-        this.error = "Archivo no válido";
+        this.error = "Archive not valid";
         this.file = null;
         return;
       }

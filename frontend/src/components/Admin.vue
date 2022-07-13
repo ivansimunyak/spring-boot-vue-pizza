@@ -114,8 +114,8 @@
           </td>
           <td>
             <btn-styled
-              class="btnDelete"
-              @click="removeUser(user.user_id, index)"
+                class="btnDelete"
+                @click="removeUser(user.id, index)"
               >Remove</btn-styled
             >
           </td>
@@ -199,7 +199,7 @@ export default {
           this.users.splice(index, 1);
         })
         .catch((error) => {
-          console.log(error.response.status);
+          console.log(error);
         });
     },
   },

@@ -104,15 +104,13 @@ export default {
 table {
   border-collapse: collapse;
   table-layout: fixed;
-  margin: 25px 0;
   font-size: 0.9em;
   padding: 0;
   font-family: sans-serif;
   min-width: 400px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   text-align: center;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 25px auto;
   width: 85%;
 }
 tbody tr {
@@ -120,6 +118,7 @@ tbody tr {
   border: 1px solid #ddd;
   padding: 0.25em;
 }
+
 thead tr {
   background-color: #a80000;
   color: #ffffff;
@@ -127,6 +126,11 @@ thead tr {
   font-weight: bold;
 }
 
+{
+{
+  editID
+}
+}
 table th,
 table td {
   width: 15px;
@@ -135,7 +139,7 @@ table td {
 }
 
 table th {
-  font-size: 12.5px;
+  font-size: 13px;
   letter-spacing: 0.1em;
 }
 </style>

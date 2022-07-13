@@ -1,5 +1,5 @@
 <template>
-  <h1 id="categoriesHeader">Categories {{ editID }}</h1>
+  <h1 id="categoriesHeader">Categories</h1>
   <section class="categoriesTable">
     <table>
       <thead>

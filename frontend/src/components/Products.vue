@@ -1,5 +1,4 @@
 <template>
-  {{ products }}
   <section class="productsTable">
     <table>
       <thead>
