@@ -243,7 +243,7 @@ export default {
         })
         .then((response) => {
           this.profileOrders = response.data;
-        });
+        })
   },
   methods: {
     deleteProfile() {

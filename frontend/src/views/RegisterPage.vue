@@ -6,33 +6,44 @@
       <b><label>Enter your username:</label></b
       ><br />
       <input
-        id="username"
-        type="text"
-        maxlength="25"
-        name="username"
-        v-model="addingUsername"
-        required
-      /><br />
-      <b><label>Enter your name:</label></b
-      ><br />
+          id="username"
+          type="text"
+          maxlength="25"
+          name="username"
+          v-model="addingUsername"
+          required
+      /><br/>
+      <b><label>Enter your first name:</label></b
+      ><br/>
       <input
-        id="name"
-        type="text"
-        maxlength="25"
-        name="name"
-        pattern="[A-z]+"
-        v-model="addingName"
-        required
-      /><br />
+          id="firstName"
+          type="text"
+          maxlength="25"
+          name="firstName"
+          pattern="[A-z]+"
+          v-model="addingFirstName"
+          required
+      /><br/>
+      <b><label>Enter your last name:</label></b
+      ><br/>
+      <input
+          id="lastName"
+          type="text"
+          maxlength="25"
+          name="lastName"
+          pattern="[A-z]+"
+          v-model="addingLastName"
+          required
+      /><br/>
       <b><label>Enter your email:</label></b
-      ><br />
+      ><br/>
       <input
-        id="email"
-        type="email"
-        maxlength="49"
-        name="email"
-        v-model="addingEmail"
-        required
+          id="email"
+          type="email"
+          maxlength="49"
+          name="email"
+          v-model="addingEmail"
+          required
       /><br />
       <b><label>Enter your password:</label></b
       ><br />
@@ -73,13 +84,6 @@
         v-model="addingPhone"
         required
       /><br />
-      <b><label>Choose your city: </label></b><br />
-      <select required name="location_name" v-model="addingCity">
-        <option disabled value="">Choose a city...</option>
-        <option v-for="city in cities" :value="city.id" :key="city.id">
-          {{ city.name }}
-        </option></select
-      ><br /><br />
       <btn-styled type="submit">Register</btn-styled>
     </form>
   </div>
@@ -87,6 +91,7 @@
 <script>
 import BtnStyled from "../components/BtnStyled.vue";
 import axios from "axios";
+
 export default {
   components: {
     BtnStyled,
@@ -94,7 +99,8 @@ export default {
   data() {
     return {
       addingUsername: "",
-      addingName: "",
+      addingFirstName: "",
+      addingLastName: "",
       addingEmail: "",
       addingPassword: "",
       rptPassword: "",
@@ -102,36 +108,29 @@ export default {
       addingPhone: "",
       userType: [],
       errorMessage: "",
-      cities: [],
-      addingCity: "",
     };
   },
   methods: {
     submitForm() {
       if (this.addingPassword.length >= 8) {
-        if (this.rptPassword == this.addingPassword) {
+        if (this.rptPassword === this.addingPassword) {
           axios
-            .post("http://localhost:3000/api/user/register", {
-              username: this.addingUsername,
-              password: this.addingPassword,
-              email: this.addingEmail,
-              adress: this.addingAdress,
-              name: this.addingName,
-              phone_number: this.addingPhone,
-              user_type_id: this.userType,
-              city_id: this.addingCity,
-            })
+              .post("http://localhost:8080/api/user/registeruser", {
+                username: this.addingUsername,
+                password: this.addingPassword,
+                email: this.addingEmail,
+                adress: this.addingAdress,
+                firstName: this.addingFirstName,
+                lastName: this.addingLastName,
+                phoneNumber: this.addingPhone,
+              })
             .then((res) => {
               //Perform Success Action
-              console.log(res.data.msg);
-              if (res.data.msg == "Register success!") {
-                this.$router.push({
-                  name: "Login",
-                  params: { userAdded: true },
-                });
-              } else if (res.data.msg == "Username or email taken!") {
-                this.errorMessage = res.data.msg;
+              console.log(res.status)
+              if (res.status === 200) {
+                this.$router.push("/login")
               }
+
             })
             .catch((error) => {
               // error.response.status Check status code
@@ -144,16 +143,6 @@ export default {
         this.errorMessage = "Password needs to be over 8 characters";
       }
     },
-  },
-  mounted() {
-    const url = "http://localhost:3000/api/city/foruser";
-    axios.get(url).then((response) => {
-      this.cities = response.data;
-    });
-    const url2 = "http://localhost:3000/api/userType/customertype";
-    axios.get(url2).then((response) => {
-      this.userType = response.data[0].id;
-    });
   },
 };
 </script>
@@ -184,14 +173,12 @@ input {
   padding: 5px;
   margin: 5px 0;
   border-radius: 10px;
-  box-shadow: 5px;
   border-width: 1px;
 }
 select {
   padding: 5px;
   margin: 5px 0;
   border-radius: 10px;
-  box-shadow: 5px;
   border-width: 1px;
 }
 </style>

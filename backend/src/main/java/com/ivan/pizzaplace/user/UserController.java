@@ -54,4 +54,9 @@ public class UserController {
     public void updateProfile(@RequestBody User user) {
         userService.updateProfile(user);
     }
+
+    @PostMapping(path = "/registeruser")
+    public void register(@RequestBody User user) {
+        userService.register(user);
+    }
 }

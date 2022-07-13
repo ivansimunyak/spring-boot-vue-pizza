@@ -28,7 +28,7 @@
           </select
           ><br/><br/>
           <label>Your comment:</label><br/><br/>
-          <textarea v-model="userComment" maxlength="499"></textarea>
+          <textarea required v-model="userComment" maxlength="499"></textarea>
           <br/>
           <btn-styled type="submit">Submit</btn-styled>
         </form>

@@ -44,13 +44,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable().
                 cors().configurationSource(corsConfigurationSource()).and()
                 .authorizeRequests().antMatchers("/login",
-                        "/register",
+                        "/api/user/registeruser",
                         "/api/product",
                         "/api/productcategory",
                         "/api/orders/**",
                         "/api/ordersproduct/**").permitAll().
+                antMatchers("/api/user/getuser/",
+                        "/api/user/changepassword",
+                        "api/user/updateprofile",
+                        "api/user/deleteprofile").hasAnyRole("Customer", "Admin", "Employee").
                 antMatchers("/api/user",
-                        "/api/user/getuser/",
                         "/api/usertype",
                         "/api/reviews/deletereview").hasRole("Admin").
                 antMatchers("/error").permitAll()

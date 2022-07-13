@@ -1,5 +1,7 @@
 package com.ivan.pizzaplace.user;
 
+import com.ivan.pizzaplace.user_type.UserType;
+import com.ivan.pizzaplace.user_type.UserTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,11 +16,13 @@ public class UserService {
     @Autowired
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final UserTypeRepository userTypeRepository;
 
     @Autowired
-    public UserService(PasswordEncoder passwordEncoder, UserRepository userRepository) {
+    public UserService(PasswordEncoder passwordEncoder, UserRepository userRepository, UserTypeRepository userTypeRepository) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+        this.userTypeRepository = userTypeRepository;
     }
 
     public List<User> getUsers() {
@@ -92,6 +96,28 @@ public class UserService {
             foundUser.setPhoneNumber(user.getPhoneNumber());
             userRepository.save(foundUser);
         } else throw new IllegalStateException("User does not exist or id is not provided!");
+    }
+
+    public void register(User user) {
+        User foundUser = userRepository.findUserByUsername(user.getUsername());
+        if (foundUser != null) {
+            throw new IllegalStateException("Username already exists!");
+        }
+        Optional<User> optionalUser = userRepository.findUserByEmail(user.getEmail());
+        if (optionalUser.isPresent()) {
+            throw new IllegalStateException("Email already exists!");
+        }
+        Optional<UserType> optionalUserType = userTypeRepository.findUserTypeByName("Customer");
+        if (optionalUserType.isPresent()) {
+            UserType userType = new UserType();
+            userType.setName(optionalUserType.get().getName());
+            userType.setId(optionalUserType.get().getId());
+            user.setUserType(userType);
+            String password = passwordEncoder.encode(user.getPassword());
+            user.setPassword(password);
+            System.out.println("User:" + user);
+            userRepository.save(user);
+        }
     }
 
 

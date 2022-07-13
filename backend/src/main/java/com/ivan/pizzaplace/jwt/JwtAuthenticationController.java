@@ -2,7 +2,6 @@ package com.ivan.pizzaplace.jwt;
 
 
 import com.ivan.pizzaplace.security.MyUserDetailsService;
-import com.ivan.pizzaplace.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,8 +24,6 @@ public class JwtAuthenticationController {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private MyUserDetailsService userDetailsService;
@@ -42,10 +39,6 @@ public class JwtAuthenticationController {
         return ResponseEntity.ok(new JwtResponse(token, authenticationRequest.getUsername(), authorities));
     }
 
-//	@RequestMapping(value = "/register", method = RequestMethod.POST)
-//	public ResponseEntity<?> saveUser(@RequestBody UserDTO user) throws Exception {
-//		return ResponseEntity.ok(userDetailsService.save(user));
-//	}
 
     private void authenticate(String username, String password) throws Exception {
         try {
