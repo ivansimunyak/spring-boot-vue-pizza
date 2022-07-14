@@ -3,13 +3,11 @@
 </template>
 
 <script>
-import Reviews from "../components/Reviews"
+import Reviews from "../components/Reviews";
 
 export default {
-  components: {Reviews}
-}
+  components: {Reviews},
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

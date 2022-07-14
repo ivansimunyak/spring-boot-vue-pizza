@@ -1,10 +1,6 @@
 <template>
   <h1>{{ this.statusMsg }}</h1>
-  <base-dialog
-      v-if="openDialog"
-      title="Order Comment"
-      @close="closeDialog"
-  >
+  <base-dialog v-if="openDialog" title="Order Comment" @close="closeDialog">
     <template #default>
       <!-- Comment below -->
       <p>{{ featuredComment }}</p>
@@ -24,23 +20,23 @@
       <td>{{ review.reviewer.email }}</td>
       <td>{{ review.rating }}</td>
       <td>
-        <btn-styled
-            class="btnEdit"
-            @click="checkComment(review.comment)"
+        <btn-styled class="btnEdit" @click="checkComment(review.comment)"
         >Check Comment
         </btn-styled>
       </td>
       <td>
-        <btn-styled class="btnDelete" @click="$router.push({ path: `/checkDetails/${review.order_id}` })"
+        <btn-styled
+            class="btnDelete"
+            @click="$router.push({ path: `/checkDetails/${review.order_id}` })"
         >Check Order
-        </btn-styled
-        >
+        </btn-styled>
       </td>
       <td>
-        <btn-styled class="btnDelete" @click="this.removeReview(review.id, index)"
+        <btn-styled
+            class="btnDelete"
+            @click="this.removeReview(review.id, index)"
         >Remove
-        </btn-styled
-        >
+        </btn-styled>
       </td>
     </tr>
     </tbody>
@@ -66,7 +62,7 @@ export default {
       statusMsg: "",
       featuredComment: "",
       openDialog: false,
-    }
+    };
   },
   computed: {
     accessToken() {
@@ -96,8 +92,8 @@ export default {
       this.openDialog = true;
     },
     closeDialog() {
-      this.openDialog = false
-    }
+      this.openDialog = false;
+    },
   },
   mounted() {
     const url = "http://localhost:8080/api/reviews/";
@@ -111,7 +107,7 @@ export default {
           this.reviews = response.data;
         });
   },
-}
+};
 </script>
 
 <style scoped>

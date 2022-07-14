@@ -29,8 +29,8 @@
                   product.price,
                   product.productCategory.id,
                   product.size,
-                  index
-                  // product.picture
+                  index,
+                  product.imageUrl
                 )
               "
               >Edit</btn-styled
@@ -39,13 +39,7 @@
           <td>
             <btn-styled
                 class="btnDelete"
-                @click="
-                removeProduct(
-                  product.id,
-                  // product.picture,
-                  index
-                )
-              "
+                @click="removeProduct(product.id, product.imageUrl, index)"
             >Remove
             </btn-styled>
           </td>
@@ -85,15 +79,16 @@
       >
         <option disabled value="">Select a category...</option>
         <option
-          v-for="category in categories"
-          :key="category.id"
-          :value="category.id"
+            v-for="category in categories"
+            :key="category.id"
+            :value="category.id"
         >
           {{ category.name }}
-        </option></select
-      ><br />
-      <!--      <label for="image">Image:</label><br />-->
-      <!--      <input type="file" name="image" @change="handleFileUpload($event)" />-->
+        </option>
+      </select
+      ><br/>
+      <label for="image">Image:</label><br/>
+      <input type="file" @change="handleUpload($event)"/>
       <btn-styled type="submit">Submit</btn-styled>
     </form>
   </div>
@@ -101,9 +96,12 @@
 <script>
 import axios from "axios";
 import BtnStyled from "../components/BtnStyled.vue";
+import {deleteObject, getStorage, ref} from "firebase/storage";
+import "firebase/storage";
+import {storage} from "../main";
 
 export default {
-  components: { BtnStyled },
+  components: {BtnStyled},
   data() {
     return {
       products: [],
@@ -113,9 +111,10 @@ export default {
       editSize: "",
       editPrice: "",
       editCategoryID: "",
-      editImage: null,
+      editUrl: "",
+      file: null,
+      imageData: null,
       saveIndex: "",
-      oldImage: "",
     };
   },
   mounted() {
@@ -149,86 +148,140 @@ export default {
   },
   methods: {
     removeProduct(id, productImg, index) {
-      axios
-          .post(
-              "http://localhost:8080/api/product/deleteproduct",
-              {id: id},
-              {
-                headers: {
-                  Authorization: "Bearer " + this.accessToken,
-                },
-              }
-          )
+      const storage = getStorage();
+      // Create a reference to the file to delete
+      const desertRef = ref(storage, productImg);
+      // Delete the file
+      deleteObject(desertRef)
           .then(() => {
-            //Perform Success Action
-            this.products.splice(index, 1);
-            alert("Product removed!");
+            // File deleted successfully
+            axios
+                .post(
+                    "http://localhost:8080/api/product/deleteproduct",
+                    {id: id},
+                    {
+                      headers: {
+                        Authorization: "Bearer " + this.accessToken,
+                      },
+                    }
+                )
+                .then(() => {
+                  //Perform Success Action
+                  this.products.splice(index, 1);
+                  alert("Product removed!");
+                })
+                .catch((error) => {
+                  // error.response.status Check status code
+                  console.log(error.response.status);
+                });
           })
-        .catch((error) => {
-          // error.response.status Check status code
-          console.log(error.response.status);
-        });
+          .catch((error) => {
+            console.log(error);
+            // Uh-oh, an error occurred!
+          });
     },
-    editProduct(id, name, price, categoryID, size, index, oldImg) {
+    handleUpload(event) {
+      console.log(event.target.files[0]);
+      const fileType = event.target.files[0].type;
+      if (fileType === "image/jpeg" || fileType === "image/png") {
+        this.file = event.target.files[0];
+        this.error = null;
+      } else {
+        this.error = "Type not valid";
+        this.file = null;
+        return;
+      }
+      const reader = new FileReader();
+      reader.readAsDataURL(this.file);
+      reader.onload = (e) => {
+        this.imageData = e.target.result;
+        // console.log(e.target.result)
+      };
+    },
+    editProduct(id, name, price, categoryID, size, index, imageUrl) {
       this.editName = name;
       this.editID = id;
       this.editCategoryID = categoryID;
       this.editSize = size;
       this.editPrice = price;
       this.saveIndex = index;
-      this.oldImage = oldImg;
+      this.editUrl = imageUrl;
       document.getElementById("editProduct").scrollIntoView();
     },
-    handleFileUpload(event) {
-      this.editImage = event.target.files[0];
-    },
-    submitForm() {
-      if (this.editImage != null) {
-        const fd = new FormData();
-        fd.append("name", this.editName);
-        fd.append("size", this.editSize);
-        fd.append("price", this.editPrice);
-        fd.append("product_category_id", this.editCategoryID);
-        fd.append("productImage", this.editImage);
-        fd.append("id", this.editID);
-        axios
-          .post(
-            "http://localhost:3000/api/products/editproductimg/" +
-              this.oldImage,
-            fd,
-            {
-              headers: {
-                Authorization: "Bearer " + this.accessToken,
-              },
-            }
-          )
-          .then((res) => {
-            alert("Product edited successfully!");
-            //Perform Success Action
-            console.log(res.data);
-            this.$store.commit("increment");
-          })
-          .catch((error) => {
-            // error.response.status Check status code
-            console.log(error.response.status);
-          });
+    async submitForm() {
+      if (this.file != null) {
+        try {
+          const refImage = storage
+              .ref()
+              .child("images")
+              .child(this.file.name + Date.now());
+          const res = await refImage.put(this.file);
+          console.log(res);
+          const urlImage = await refImage.getDownloadURL();
+          console.log(urlImage);
+          const record = this.categories.find(
+              (element) => element.id === this.editCategoryID
+          );
+          axios
+              .post(
+                  "http://localhost:8080/api/product/updateproduct",
+                  {
+                    id: this.editID,
+                    name: this.editName,
+                    size: this.editSize,
+                    price: this.editPrice,
+                    productCategory: {id: this.editCategoryID, name: record.name},
+                    imageUrl: urlImage,
+                  },
+                  {
+                    headers: {
+                      Authorization: "Bearer " + this.accessToken,
+                    },
+                  }
+              )
+              .then(() => {
+                //Perform Success Action
+                const storage = getStorage();
+                // Create a reference to the file to delete
+                const desertRef = ref(storage, this.editUrl);
+                // Delete the file
+                deleteObject(desertRef)
+                    .then(() => {
+                      // File deleted successfully
+                      this.uniqueProductKey++;
+                      this.$store.commit("increment");
+                      alert("Product edited!");
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                      // Uh-oh, an error occurred!
+                    });
+              })
+              .catch((error) => {
+                // error.response.status Check status code
+                console.log(error.response.status);
+              });
+        } catch (error) {
+          console.log(error);
+        }
       } else {
         axios
-          .post(
-              "http://localhost:8080/api/product/updateproduct",
-              {
-                name: this.editName,
-                id: this.editID,
-                size: this.editSize,
-                price: this.editPrice,
-                productCategory: {id: this.editCategoryID},
-              },
-              {
-                headers: {
-                  Authorization: "Bearer " + this.accessToken,
+            .post(
+                "http://localhost:8080/api/product/updateproduct",
+                {
+                  name: this.editName,
+                  id: this.editID,
+                  size: this.editSize,
+                  price: this.editPrice,
+                  productCategory: {id: this.editCategoryID},
+                  imageUrl: this.editUrl,
                 },
-              }
-          )
+                {
+                  headers: {
+                    Authorization: "Bearer " + this.accessToken,
+                  },
+                }
+            )
           .then((res) => {
             //Perform Success Action
             console.log(res.data);
@@ -247,7 +300,6 @@ export default {
 
 <style scoped>
 .productsTable {
-  border: 1px solid #999;
   border-radius: 1px;
   color: #333;
   background: white;

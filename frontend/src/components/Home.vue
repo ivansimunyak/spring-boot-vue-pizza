@@ -64,14 +64,15 @@
           {{ product.productCategory.name }}
         </td>
         <td v-if="product.productCategory.name === selectedCategory">
-            {{ product.price }}
-          </td>
-          <td v-if="product.productCategory.name === selectedCategory">
-            <btn-styled class="btnDelete" @click="addToCart(product)"
-              >Add to cart</btn-styled
-            >
-          </td>
-        </tr>
+          {{ product.price }}
+        </td>
+        <td v-if="product.productCategory.name === selectedCategory">
+          <btn-styled class="btnDelete" @click="addToCart(product)"
+          >Add to cart
+          </btn-styled
+          >
+        </td>
+      </tr>
       </tbody>
     </table>
   </section>

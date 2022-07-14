@@ -118,18 +118,11 @@ tbody tr {
   border: 1px solid #ddd;
   padding: 0.25em;
 }
-
 thead tr {
   background-color: #a80000;
   color: #ffffff;
   text-align: left;
   font-weight: bold;
-}
-
-{
-{
-  editID
-}
 }
 table th,
 table td {

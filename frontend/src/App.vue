@@ -1,49 +1,46 @@
 <template>
   <div id="navlist">
-    <router-link v-if="isAdmin" to="/admin"
-    >
+    <router-link v-if="isAdmin" to="/admin">
       <font-awesome-icon :icon="['fas', 'user-gear']"/>
       Admin
-    </router-link
-    >
-    <router-link v-if="isAdmin || isEmployee" to="/orders"
-    >
+    </router-link>
+    <router-link v-if="isAdmin || isEmployee" to="/orders">
       <font-awesome-icon :icon="['fas', 'list']"/>
       Orders
-    </router-link
-    >
-    <router-link v-if="isAdmin" to="/reviews"
-    >
+    </router-link>
+    <router-link v-if="isAdmin" to="/reviews">
       <font-awesome-icon :icon="['fas', 'user-gear']"/>
       Reviews
-    </router-link
-    >
-    <router-link v-if="isAdmin" to="/products"
-    >
+    </router-link>
+    <router-link v-if="isAdmin" to="/products">
       <font-awesome-icon :icon="['fas', 'list']"/>
       Products
-    </router-link
-    >
-    <router-link v-if="isAdmin" to="/categories"
-    >
+    </router-link>
+    <router-link v-if="isAdmin" to="/categories">
       <font-awesome-icon :icon="['fas', 'list']"/>
       Categories
-    </router-link
-    >
-    <router-link v-if="isAdmin" to="/usertypes"
-    >
+    </router-link>
+    <router-link v-if="isAdmin" to="/usertypes">
       <font-awesome-icon :icon="['fas', 'users']"/>
       User Types
+    </router-link>
+    <router-link to="/"
+    >
+      <font-awesome-icon :icon="['fas', 'house']"/>
+      Home
     </router-link
     >
-    <router-link to="/"
-      ><font-awesome-icon :icon="['fas', 'house']" /> Home</router-link
-    >
     <router-link to="/about"
-      ><font-awesome-icon :icon="['fas', 'users']" /> About Us</router-link
+    >
+      <font-awesome-icon :icon="['fas', 'users']"/>
+      About Us
+    </router-link
     >
     <router-link v-if="isLoggedIn" to="/profile"
-      ><font-awesome-icon :icon="['fas', 'user']" /> Profile</router-link
+    >
+      <font-awesome-icon :icon="['fas', 'user']"/>
+      Profile
+    </router-link
     >
     <router-link to="/cart"
       ><font-awesome-icon :icon="['fas', 'cart-shopping']" /> Cart ({{

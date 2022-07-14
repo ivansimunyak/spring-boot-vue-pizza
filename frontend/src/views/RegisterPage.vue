@@ -4,7 +4,7 @@
     <h2>{{ errorMessage }}</h2>
     <form class="RegistrationPageForm" @submit.prevent="submitForm">
       <b><label>Enter your username:</label></b
-      ><br />
+      ><br/>
       <input
           id="username"
           type="text"
@@ -44,9 +44,9 @@
           name="email"
           v-model="addingEmail"
           required
-      /><br />
+      /><br/>
       <b><label>Enter your password:</label></b
-      ><br />
+      ><br/>
       <input
         id="password"
         type="password"
@@ -126,11 +126,10 @@ export default {
               })
             .then((res) => {
               //Perform Success Action
-              console.log(res.status)
+              console.log(res.status);
               if (res.status === 200) {
-                this.$router.push("/login")
+                this.$router.push("/login");
               }
-
             })
             .catch((error) => {
               // error.response.status Check status code

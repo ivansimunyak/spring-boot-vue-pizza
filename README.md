@@ -1,5 +1,6 @@
 # Spring Boot, Vue.js Pizza Place
 
+
 ## Short Description
 
 This project is a modified version of "Pizzeria", this project differs from the first in a few ways.
@@ -33,9 +34,7 @@ statistics to this project
 suggestions feel free to message me, and also checkout the previous version of this project on my GitHub.
 
 ## Technologies
-
 Project is built with:
-
 * Vue.js
 * Spring Boot
 * MySQL

@@ -1,6 +1,6 @@
 <template>
   <div id="wrapper">
-    <h1 id="productsHeader">Products</h1>
+    <h1 id="productsHeader">Products{{ setImages }}</h1>
     <products :key="this.$store.state.uniqueProductKey"></products>
     <h2 id="addNew">Add new product</h2>
     <div class="addProductForm">
@@ -62,6 +62,7 @@ export default {
       imageData: null,
       categories: [],
       addingCategoryName: "",
+      setImages: [],
     };
   },
   computed: {
@@ -72,12 +73,12 @@ export default {
   methods: {
     handleUpload(event) {
       console.log(event.target.files[0]);
-      const tipoArchivo = event.target.files[0].type;
-      if (tipoArchivo === "image/jpeg" || tipoArchivo === "image/png") {
+      const fileType = event.target.files[0].type;
+      if (fileType === "image/jpeg" || fileType === "image/png") {
         this.file = event.target.files[0];
         this.error = null;
       } else {
-        this.error = "Archive not valid";
+        this.error = "File type not valid";
         this.file = null;
         return;
       }
