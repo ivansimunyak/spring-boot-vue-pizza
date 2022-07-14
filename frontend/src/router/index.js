@@ -101,8 +101,7 @@ const routes = [
     path: "/reviews",
     name: "Reviews Page",
     component: ReviewsPage,
-
-  }
+  },
 ];
 
 const router = createRouter({

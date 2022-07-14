@@ -71,11 +71,11 @@
       <br />
       <label for="category">Category:</label><br />
       <select
-        required
-        class="selectForm"
-        ref="inputCategory"
-        name="category"
-        v-model="editCategoryID"
+          required
+          class="selectForm"
+          ref="inputCategory"
+          name="category"
+          v-model="editCategoryID"
       >
         <option disabled value="">Select a category...</option>
         <option

@@ -69,8 +69,7 @@
         <td v-if="product.productCategory.name === selectedCategory">
           <btn-styled class="btnDelete" @click="addToCart(product)"
           >Add to cart
-          </btn-styled
-          >
+          </btn-styled>
         </td>
       </tr>
       </tbody>

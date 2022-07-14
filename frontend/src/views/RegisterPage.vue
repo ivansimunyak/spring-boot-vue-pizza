@@ -48,15 +48,15 @@
       <b><label>Enter your password:</label></b
       ><br/>
       <input
-        id="password"
-        type="password"
-        name="password"
-        maxlength="25"
-        v-model="addingPassword"
-        required
-      /><br />
+          id="password"
+          type="password"
+          name="password"
+          maxlength="25"
+          v-model="addingPassword"
+          required
+      /><br/>
       <b><label>Repeat your password:</label></b
-      ><br />
+      ><br/>
       <input
         id="rptpassword"
         type="password"

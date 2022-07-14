@@ -1,6 +1,6 @@
 <template>
   <div class="info-form">
-    <h1>Checkout{{ cartProducts }}</h1>
+    <h1>Checkout</h1>
     <form @submit.prevent="submitForm">
       <div id="left-form">
         <input

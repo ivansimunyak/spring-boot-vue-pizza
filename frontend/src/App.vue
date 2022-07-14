@@ -24,32 +24,31 @@
       <font-awesome-icon :icon="['fas', 'users']"/>
       User Types
     </router-link>
-    <router-link to="/"
-    >
+    <router-link to="/">
       <font-awesome-icon :icon="['fas', 'house']"/>
       Home
-    </router-link
-    >
-    <router-link to="/about"
-    >
+    </router-link>
+    <router-link to="/about">
       <font-awesome-icon :icon="['fas', 'users']"/>
       About Us
-    </router-link
-    >
-    <router-link v-if="isLoggedIn" to="/profile"
-    >
+    </router-link>
+    <router-link v-if="isLoggedIn" to="/profile">
       <font-awesome-icon :icon="['fas', 'user']"/>
       Profile
+    </router-link>
+    <router-link to="/cart"
+    >
+      <font-awesome-icon :icon="['fas', 'cart-shopping']"/>
+      Cart ({{
+        cartCount
+      }})
     </router-link
     >
-    <router-link to="/cart"
-      ><font-awesome-icon :icon="['fas', 'cart-shopping']" /> Cart ({{
-        cartCount
-      }})</router-link
-    >
     <router-link v-if="isLoggedIn || isAdmin" to="/logout"
-      ><font-awesome-icon :icon="['fas', 'arrow-right-from-bracket']" />
-      Logout</router-link
+    >
+      <font-awesome-icon :icon="['fas', 'arrow-right-from-bracket']"/>
+      Logout
+    </router-link
     >
     <router-link v-if="!isLoggedIn" to="/login"
       ><font-awesome-icon :icon="['fas', 'arrow-right-to-bracket']" />

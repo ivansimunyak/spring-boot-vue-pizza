@@ -115,8 +115,7 @@
           <td>
             <btn-styled class="btnDelete" @click="removeUser(user.id, index)"
             >Remove
-            </btn-styled
-            >
+            </btn-styled>
           </td>
         </tr>
       </tbody>

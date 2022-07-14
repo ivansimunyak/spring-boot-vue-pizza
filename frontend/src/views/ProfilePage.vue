@@ -1,6 +1,5 @@
 <template>
   <div id="wrapper">
-    <h3>{{ localUser.id }}</h3>
     <base-dialog
       v-if="deleteUser"
       title="Delete Your Profile"
