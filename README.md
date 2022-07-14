@@ -34,7 +34,31 @@ statistics to this project
 suggestions feel free to message me, and also checkout the previous version of this project on my GitHub.
 
 ## Technologies
+
 Project is built with:
+
 * Vue.js
 * Spring Boot
 * MySQL
+
+## Project setup
+
+Set up database from pizzaplace.sql and run commands below to start.
+For the backend to work run PizzaPlaceApplication.java, you need to set your own credentials in application.properties
+
+At login, you can use any of the following three combinations to see different interfaces:
+
+1. username: admin password: admin
+2. username: employee password: employee
+3. username: customer password: customer
+
+```
+## Install project
+
+npm install
+
+## Frontend
+
+npm run serve
+
+```
